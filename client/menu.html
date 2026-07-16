@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu — The Veggie King</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green:       #2d7a2d;
+      --green-dark:  #1e5c1e;
+      --green-light: #e8f5e8;
+      --orange:      #ff4500;
+      --orange-hover:#e03d00;
+      --white:       #ffffff;
+      --gray:        #f7f7f7;
+      --text:        #1a1a1a;
+      --muted:       #888;
+      --border:      #e0e0e0;
+      --shadow:      rgba(0,0,0,0.10);
+      --card-radius: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Raleway', sans-serif; background: var(--gray); color: var(--text); }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed; top: 0; width: 100%; height: 70px;
+      background: white; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+    .navbar img { height: 38px; }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--text);
+      font-weight: 600; font-size: 0.9rem; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--green); }
+    .nav-links a.active { color: var(--green); border-bottom: 2px solid var(--green); padding-bottom: 2px; }
+
+    .cart-btn {
+      background: var(--orange); color: white;
+      border: none; border-radius: 50px;
+      padding: 0.5rem 1.2rem;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.85rem;
+      cursor: pointer; transition: background 0.2s, transform 0.15s;
+      display: flex; align-items: center; gap: 0.4rem;
+      text-decoration: none;
+    }
+    .cart-btn:hover { background: var(--orange-hover); transform: scale(1.05); }
+    .cart-count {
+      background: white; color: var(--orange);
+      border-radius: 50%; width: 20px; height: 20px;
+      font-size: 0.75rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── HERO BANNER ── */
+    .hero-banner {
+      margin-top: 70px;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+      padding: 3rem 2rem;
+      text-align: center; color: white;
+      position: relative; overflow: hidden;
+    }
+    .hero-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 50%, rgba(255,255,255,0.07) 0%, transparent 60%);
+    }
+    .hero-banner h1 { font-size: 2.2rem; font-weight: 900; margin-bottom: 0.5rem; }
+    .hero-banner p  { font-size: 1rem; opacity: 0.85; }
+
+    /* ── FILTERS ── */
+    .filters-bar {
+      background: white;
+      padding: 1rem 2rem;
+      display: flex; align-items: center; gap: 1rem;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 8px var(--shadow);
+      position: sticky; top: 70px; z-index: 100;
+    }
+    .filter-label { font-weight: 700; font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .category-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; flex: 1; }
+    .cat-btn {
+      padding: 0.45rem 1rem; border-radius: 50px;
+      border: 2px solid var(--border); background: white;
+      font-family: 'Raleway', sans-serif; font-weight: 600; font-size: 0.82rem;
+      cursor: pointer; transition: all 0.2s; color: var(--text);
+    }
+    .cat-btn:hover  { border-color: var(--green); color: var(--green); }
+    .cat-btn.active { background: var(--green); border-color: var(--green); color: white; }
+
+    .veg-toggle {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-weight: 600; font-size: 0.85rem; cursor: pointer;
+      padding: 0.45rem 1rem; border-radius: 50px;
+      border: 2px solid var(--border); background: white;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .veg-toggle.active { background: var(--green-light); border-color: var(--green); color: var(--green); }
+
+    .search-wrap { position: relative; }
+    .search-wrap input {
+      padding: 0.45rem 1rem 0.45rem 2.2rem;
+      border: 2px solid var(--border); border-radius: 50px;
+      font-family: 'Raleway', sans-serif; font-size: 0.85rem;
+      outline: none; transition: border-color 0.2s; width: 180px;
+    }
+    .search-wrap input:focus { border-color: var(--green); }
+    .search-wrap .si { position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; }
+
+    /* ── MAIN CONTENT ── */
+    .main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    .section-title {
+      font-size: 1.3rem; font-weight: 900; color: var(--text);
+      margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .section-title span { color: var(--green); }
+
+    /* ── OFFERS STRIP ── */
+    .offers-strip {
+      display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.5rem;
+      margin-bottom: 2rem; scrollbar-width: none;
+    }
+    .offers-strip::-webkit-scrollbar { display: none; }
+    .offer-chip {
+      background: linear-gradient(135deg, var(--orange), #ff7043);
+      color: white; border-radius: 12px;
+      padding: 0.75rem 1.25rem; white-space: nowrap; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 0.15rem;
+    }
+    .offer-chip .code { font-size: 1rem; font-weight: 900; }
+    .offer-chip .desc { font-size: 0.75rem; opacity: 0.9; }
+
+    /* ── MENU GRID ── */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* ── MENU CARD ── */
+    .menu-card {
+      background: white; border-radius: var(--card-radius);
+      overflow: hidden;
+      box-shadow: 0 2px 12px var(--shadow);
+      transition: transform 0.25s, box-shadow 0.25s;
+      display: flex; flex-direction: column;
+      animation: fadeIn 0.35s ease both;
+    }
+    .menu-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,0,0,0.13); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-img {
+      width: 100%; height: 180px; object-fit: cover;
+      background: var(--green-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem;
+    }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .card-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
+    .card-name { font-size: 1rem; font-weight: 800; line-height: 1.3; }
+
+    .veg-dot {
+      width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px;
+      border: 2px solid var(--green); border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .veg-dot::after {
+      content: ''; width: 8px; height: 8px;
+      background: var(--green); border-radius: 50%;
+    }
+
+    .card-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; flex: 1; }
+    .card-cat  { font-size: 0.75rem; color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 0.75rem; padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .card-price { font-size: 1.15rem; font-weight: 900; color: var(--text); }
+    .card-price span { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+
+    .qty-control {
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .qty-btn {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 2px solid var(--green); background: white;
+      color: var(--green); font-size: 1.1rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; line-height: 1;
+    }
+    .qty-btn:hover { background: var(--green); color: white; }
+    .qty-num { font-weight: 800; font-size: 0.95rem; min-width: 16px; text-align: center; }
+
+    .add-btn {
+      background: var(--orange); color: white;
+      border: none; border-radius: 50px;
+      padding: 0.45rem 1.1rem;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.82rem;
+      cursor: pointer; transition: background 0.2s, transform 0.15s;
+    }
+    .add-btn:hover { background: var(--orange-hover); transform: scale(1.05); }
+    .add-btn.added { background: var(--green); }
+
+    /* ── SKELETON LOADER ── */
+    .skeleton { background: #e0e0e0; border-radius: 8px; animation: shimmer 1.2s infinite; }
+    @keyframes shimmer {
+      0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+    }
+    .skeleton-card {
+      background: white; border-radius: var(--card-radius);
+      overflow: hidden; box-shadow: 0 2px 12px var(--shadow);
+    }
+    .sk-img  { height: 180px; }
+    .sk-body { padding: 1rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .sk-line { height: 14px; border-radius: 6px; }
+    .sk-line.w80 { width: 80%; }
+    .sk-line.w60 { width: 60%; }
+    .sk-line.w40 { width: 40%; }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      grid-column: 1/-1; text-align: center; padding: 3rem;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    }
+    .empty .icon { font-size: 3.5rem; }
+    .empty h3 { font-size: 1.2rem; font-weight: 800; }
+    .empty p  { color: var(--muted); font-size: 0.9rem; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--green-dark); color: white;
+      padding: 0.75rem 1.5rem; border-radius: 50px;
+      font-weight: 700; font-size: 0.9rem;
+      z-index: 999; transition: transform 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── FLOATING CART ── */
+    .floating-cart {
+      position: fixed; bottom: 24px; right: 24px; z-index: 300;
+      background: var(--orange); color: white;
+      border: none; border-radius: 50px;
+      padding: 0.9rem 1.5rem;
+      font-family: 'Raleway', sans-serif; font-weight: 800; font-size: 0.95rem;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(255,69,0,0.4);
+      display: none; align-items: center; gap: 0.75rem;
+      transition: transform 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .floating-cart:hover { background: var(--orange-hover); transform: scale(1.04); }
+    .floating-cart.visible { display: flex; animation: bounceIn 0.4s ease; }
+    @keyframes bounceIn {
+      0%   { transform: scale(0.5); opacity: 0; }
+      70%  { transform: scale(1.1); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+
+    /* ── LOGIN PROMPT ── */
+    .login-prompt {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      z-index: 500; display: none; align-items: center; justify-content: center;
+    }
+    .login-prompt.show { display: flex; }
+    .lp-box {
+      background: white; border-radius: 20px; padding: 2rem;
+      text-align: center; max-width: 340px; width: 90%;
+      display: flex; flex-direction: column; gap: 1rem;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .lp-box .icon { font-size: 3rem; }
+    .lp-box h3    { font-size: 1.2rem; font-weight: 900; }
+    .lp-box p     { color: var(--muted); font-size: 0.88rem; }
+    .lp-btns      { display: flex; gap: 0.75rem; }
+    .lp-btns a, .lp-btns button {
+      flex: 1; padding: 0.7rem; border-radius: 12px;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.9rem;
+      cursor: pointer; text-decoration: none; text-align: center;
+      border: none; transition: opacity 0.2s;
+    }
+    .lp-btns a      { background: var(--green); color: white; }
+    .lp-btns button { background: var(--gray); color: var(--text); }
+    .lp-btns a:hover, .lp-btns button:hover { opacity: 0.85; }
+
+    @media (max-width: 600px) {
+      .hero-banner h1 { font-size: 1.6rem; }
+      .filters-bar { padding: 0.75rem 1rem; gap: 0.5rem; }
+      .search-wrap input { width: 140px; }
+      .main { padding: 1.25rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="./index.html">
+      <img src="./assets/icons/logo.svg" alt="Veggie King" onerror="this.style.display='none'"/>
+    </a>
+    <ul class="nav-links">
+      <li><a href="./index.html#about-us">About Us</a></li>
+      <li><a href="./menu.html" class="active">Menu</a></li>
+      <li><a href="./index.html#contact">Contact</a></li>
+      <li><a href="./auth.html" id="navAuthLink">Login</a></li>
+    </ul>
+    <a href="./cart.html" class="cart-btn" id="navCartBtn" style="display:none;">
+      🛒 Cart <span class="cart-count" id="navCartCount">0</span>
+    </a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero-banner">
+    <h1>🥗 Explore Our Menu</h1>
+    <p>Fresh, healthy & delicious — made with love every day</p>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-bar">
+    <span class="filter-label">Filter:</span>
+    <div class="category-btns" id="categoryBtns">
+      <button class="cat-btn active" data-id="">All</button>
+    </div>
+    <button class="veg-toggle" id="vegToggle" onclick="toggleVeg()">🟢 Veg Only</button>
+    <div class="search-wrap">
+      <span class="si">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search items..." oninput="renderMenu()"/>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- OFFERS STRIP -->
+    <div id="offersSection" style="display:none;">
+      <div class="section-title">🎁 Today's <span>Offers</span></div>
+      <div class="offers-strip" id="offersStrip"></div>
+    </div>
+
+    <!-- MENU -->
+    <div class="section-title" id="menuTitle">🍽️ All <span>Items</span></div>
+    <div class="menu-grid" id="menuGrid">
+      <!-- skeletons -->
+      ${Array(6).fill(`
+        <div class="skeleton-card">
+          <div class="skeleton sk-img"></div>
+          <div class="sk-body">
+            <div class="skeleton sk-line w80"></div>
+            <div class="skeleton sk-line w60"></div>
+            <div class="skeleton sk-line w40"></div>
+          </div>
+        </div>`).join('')}
+    </div>
+  </main>
+
+  <!-- FLOATING CART -->
+  <a href="./cart.html" class="floating-cart" id="floatingCart">
+    🛒 View Cart &nbsp;·&nbsp; <span id="floatCount">0</span> items
+  </a>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- LOGIN PROMPT MODAL -->
+  <div class="login-prompt" id="loginPrompt">
+    <div class="lp-box">
+      <div class="icon">🔒</div>
+      <h3>Login to Add Items</h3>
+      <p>Create a free account to add items to your cart and place orders!</p>
+      <div class="lp-btns">
+        <a href="./auth.html">Login / Register</a>
+        <button onclick="closeLoginPrompt()">Maybe Later</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:5000/api';
+    const token = localStorage.getItem('vk_token');
+    const user  = JSON.parse(localStorage.getItem('vk_user') || '{}');
+
+    let allItems      = [];
+    let cart          = {};   // { menu_item_id: quantity }
+    let activeCategory = '';
+    let vegOnly        = false;
+
+    // ── On load ───────────────────────────────
+    window.addEventListener('DOMContentLoaded', async () => {
+      setupNavAuth();
+      await Promise.all([loadCategories(), loadMenu(), loadOffers()]);
+      if (token) await loadCartFromServer();
+      updateCartUI();
+    });
+
+    // ── Navbar auth ───────────────────────────
+    function setupNavAuth() {
+      const link = document.getElementById('navAuthLink');
+      const cartBtn = document.getElementById('navCartBtn');
+      if (user && user.name) {
+        link.textContent = '👤 ' + user.name.split(' ')[0];
+        link.href = '#';
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          if (confirm('Logout from Veggie King?')) {
+            localStorage.removeItem('vk_token');
+            localStorage.removeItem('vk_user');
+            window.location.reload();
+          }
+        });
+        cartBtn.style.display = 'flex';
+      }
+    }
+
+    // ── Load categories ───────────────────────
+    async function loadCategories() {
+      try {
+        const res  = await fetch(`${API}/menu/categories`);
+        const data = await res.json();
+        const wrap = document.getElementById('categoryBtns');
+        wrap.innerHTML = '<button class="cat-btn active" data-id="" onclick="filterCategory(this,\'\')">All</button>';
+        data.categories.forEach(c => {
+          const btn = document.createElement('button');
+          btn.className = 'cat-btn';
+          btn.dataset.id = c.id;
+          btn.textContent = c.name;
+          btn.onclick = () => filterCategory(btn, c.id);
+          wrap.appendChild(btn);
+        });
+      } catch(e) { console.error('Categories error', e); }
+    }
+
+    // ── Load menu ─────────────────────────────
+    async function loadMenu() {
+      try {
+        const res  = await fetch(`${API}/menu`);
+        const data = await res.json();
+        allItems = data.items || [];
+        renderMenu();
+      } catch(e) {
+        document.getElementById('menuGrid').innerHTML =
+          `<div class="empty"><div class="icon">⚠️</div><h3>Could not load menu</h3><p>Make sure your backend is running at localhost:5000</p></div>`;
+      }
+    }
+
+    // ── Load offers ───────────────────────────
+    async function loadOffers() {
+      try {
+        const res  = await fetch(`${API}/offers`);
+        const data = await res.json();
+        if (!data.offers || !data.offers.length) return;
+        const strip = document.getElementById('offersStrip');
+        strip.innerHTML = data.offers.map(o => `
+          <div class="offer-chip">
+            <div class="code">🏷️ ${o.code}</div>
+            <div class="desc">${o.title} — ${o.discount_type === 'percentage' ? o.discount_value + '% off' : '₹' + o.discount_value + ' off'}</div>
+            <div class="desc" style="opacity:0.7;font-size:0.7rem;">Min. order ₹${o.min_order}</div>
+          </div>`).join('');
+        document.getElementById('offersSection').style.display = 'block';
+      } catch(e) {}
+    }
+
+    // ── Load cart from server ─────────────────
+    async function loadCartFromServer() {
+      try {
+        const res  = await fetch(`${API}/cart`, { headers: { Authorization: `Bearer ${token}` } });
+        const data = await res.json();
+        if (data.success) {
+          cart = {};
+          data.cart.forEach(item => { cart[item.menu_item_id] = item.quantity; });
+        }
+      } catch(e) {}
+    }
+
+    // ── Render menu ───────────────────────────
+    function renderMenu() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      let items = allItems.filter(item => {
+        const matchCat  = !activeCategory || item.category_id == activeCategory;
+        const matchVeg  = !vegOnly || item.is_veg;
+        const matchQ    = !q || item.name.toLowerCase().includes(q) || (item.description||'').toLowerCase().includes(q);
+        return matchCat && matchVeg && matchQ;
+      });
+
+      const grid = document.getElementById('menuGrid');
+      const title = document.getElementById('menuTitle');
+
+      if (!items.length) {
+        grid.innerHTML = `<div class="empty"><div class="icon">🔍</div><h3>No items found</h3><p>Try a different filter or search term</p></div>`;
+        return;
+      }
+
+      title.innerHTML = `🍽️ <span>${items.length}</span> Items`;
+      grid.innerHTML = items.map((item, i) => buildCard(item, i)).join('');
+    }
+
+    // ── Build card HTML ───────────────────────
+    function buildCard(item, i) {
+      const qty  = cart[item.id] || 0;
+      const emoji = getCategoryEmoji(item.category_name);
+      const imgHtml = item.image_url
+        ? `<img src="${item.image_url}" alt="${item.name}" onerror="this.parentElement.innerHTML='${emoji}'" />`
+        : emoji;
+
+      return `
+        <div class="menu-card" style="animation-delay:${i * 0.05}s">
+          <div class="card-img">${imgHtml}</div>
+          <div class="card-body">
+            <div class="card-top">
+              <div class="card-name">${item.name}</div>
+              ${item.is_veg ? '<div class="veg-dot"></div>' : ''}
+            </div>
+            <div class="card-cat">${item.category_name || ''}</div>
+            <div class="card-desc">${item.description || 'Fresh and delicious, made with care.'}</div>
+            <div class="card-footer">
+              <div class="card-price">₹${item.price} <span>/ serving</span></div>
+              ${qty > 0
+                ? `<div class="qty-control">
+                     <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
+                     <span class="qty-num" id="qty-${item.id}">${qty}</span>
+                     <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                   </div>`
+                : `<button class="add-btn" id="addbtn-${item.id}" onclick="addToCart(${item.id}, this)">+ Add</button>`
+              }
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function getCategoryEmoji(cat) {
+      const map = { Burgers:'🍔', Salads:'🥗', Wraps:'🌯', Drinks:'🥤', Desserts:'🍮' };
+      return map[cat] || '🥦';
+    }
+
+    // ── Add to cart ───────────────────────────
+    async function addToCart(menuItemId, btn) {
+      if (!token) { showLoginPrompt(); return; }
+      btn.textContent = '...'; btn.disabled = true;
+      try {
+        const res  = await fetch(`${API}/cart`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ menu_item_id: menuItemId, quantity: 1 })
+        });
+        const data = await res.json();
+        if (data.success) {
+          cart[menuItemId] = 1;
+          renderMenu();
+          updateCartUI();
+          showToast('✅ Added to cart!');
+        } else { btn.textContent = '+ Add'; btn.disabled = false; }
+      } catch(e) { btn.textContent = '+ Add'; btn.disabled = false; }
+    }
+
+    // ── Change qty ────────────────────────────
+    async function changeQty(menuItemId, delta) {
+      if (!token) { showLoginPrompt(); return; }
+      const newQty = (cart[menuItemId] || 0) + delta;
+
+      if (newQty <= 0) {
+        // Remove from cart
+        await fetch(`${API}/cart/${menuItemId}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        delete cart[menuItemId];
+      } else {
+        await fetch(`${API}/cart/${menuItemId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ quantity: newQty })
+        });
+        cart[menuItemId] = newQty;
+      }
+      renderMenu();
+      updateCartUI();
+    }
+
+    // ── Update cart count UI ──────────────────
+    function updateCartUI() {
+      const total = Object.values(cart).reduce((s, q) => s + q, 0);
+      document.getElementById('navCartCount').textContent = total;
+      document.getElementById('floatCount').textContent   = total;
+      const fc = document.getElementById('floatingCart');
+      if (total > 0) fc.classList.add('visible');
+      else           fc.classList.remove('visible');
+    }
+
+    // ── Filter by category ────────────────────
+    function filterCategory(btn, catId) {
+      activeCategory = catId;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderMenu();
+    }
+
+    // ── Veg toggle ────────────────────────────
+    function toggleVeg() {
+      vegOnly = !vegOnly;
+      document.getElementById('vegToggle').classList.toggle('active', vegOnly);
+      renderMenu();
+    }
+
+    // ── Toast ─────────────────────────────────
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // ── Login prompt ──────────────────────────
+    function showLoginPrompt()  { document.getElementById('loginPrompt').classList.add('show'); }
+    function closeLoginPrompt() { document.getElementById('loginPrompt').classList.remove('show'); }
+  </script>
+</body>
+</html>

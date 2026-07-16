@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login / Register — The Veggie King</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green:      #2d7a2d;
+      --green-dark: #1e5c1e;
+      --green-light:#e8f5e8;
+      --orange:     #ff4500;
+      --orange-hover:#e03d00;
+      --white:      #ffffff;
+      --gray:       #f7f7f7;
+      --text:       #1a1a1a;
+      --muted:      #888;
+      --border:     #e0e0e0;
+      --shadow:     rgba(0,0,0,0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      background: var(--gray);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed; top: 0; width: 100%; height: 70px;
+      background: white; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+    .navbar img { height: 38px; }
+    .navbar a {
+      text-decoration: none; color: var(--text);
+      font-weight: 600; font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .navbar a:hover { color: var(--green); }
+
+    /* ── MAIN LAYOUT ── */
+    .page {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 1rem 2rem;
+      gap: 0;
+    }
+
+    /* ── LEFT PANEL (illustration) ── */
+    .left-panel {
+      display: none;
+      background: var(--green);
+      border-radius: 24px 0 0 24px;
+      padding: 3rem;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      min-height: 600px;
+      width: 380px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    @media (min-width: 900px) { .left-panel { display: flex; } }
+
+    .left-panel::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.08) 0%, transparent 60%);
+    }
+
+    .left-panel .badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50px;
+      padding: 0.4rem 1rem;
+      color: white; font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+    .left-panel h2 {
+      color: white; font-size: 2rem; font-weight: 900;
+      text-align: center; line-height: 1.3;
+    }
+    .left-panel p {
+      color: rgba(255,255,255,0.8); text-align: center;
+      font-size: 0.95rem; line-height: 1.6;
+    }
+    .left-panel .emoji-row {
+      display: flex; gap: 1rem; font-size: 2.5rem;
+    }
+    .left-panel .features {
+      display: flex; flex-direction: column; gap: 0.75rem;
+      width: 100%;
+    }
+    .left-panel .feature {
+      display: flex; align-items: center; gap: 0.75rem;
+      color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 500;
+    }
+    .left-panel .feature span.icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      width: 100%; max-width: 420px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.10);
+      animation: slideUp 0.4s ease;
+    }
+    @media (min-width: 900px) {
+      .card { border-radius: 0 24px 24px 0; box-shadow: 0 8px 40px rgba(0,0,0,0.12); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex; background: var(--gray); border-radius: 12px;
+      padding: 4px; margin-bottom: 2rem;
+    }
+    .tab {
+      flex: 1; padding: 0.6rem;
+      border: none; background: transparent;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.95rem;
+      color: var(--muted); border-radius: 10px;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .tab.active {
+      background: white; color: var(--green);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    /* ── FORM HEADER ── */
+    .form-header { margin-bottom: 1.5rem; }
+    .form-header h1 { font-size: 1.6rem; font-weight: 900; color: var(--text); }
+    .form-header p  { color: var(--muted); font-size: 0.9rem; margin-top: 0.3rem; }
+
+    /* ── FORM FIELDS ── */
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block; font-size: 0.82rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.4rem; text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .input-wrap { position: relative; }
+    .input-wrap .icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 1rem; pointer-events: none;
+    }
+    .input-wrap input {
+      width: 100%; padding: 0.75rem 0.875rem 0.75rem 2.6rem;
+      border: 2px solid var(--border); border-radius: 12px;
+      font-family: 'Raleway', sans-serif; font-size: 0.95rem;
+      color: var(--text); background: var(--gray);
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+    }
+    .input-wrap input:focus {
+      border-color: var(--green); background: white;
+    }
+    .input-wrap input.error { border-color: #e53935; }
+    .input-wrap .toggle-pw {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; font-size: 1rem; background: none; border: none;
+      color: var(--muted);
+    }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    /* ── ERROR / SUCCESS MESSAGES ── */
+    .field-error {
+      color: #e53935; font-size: 0.78rem; margin-top: 0.25rem;
+      font-weight: 600; display: none;
+    }
+    .field-error.show { display: block; }
+
+    .alert {
+      padding: 0.75rem 1rem; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 600; margin-bottom: 1rem;
+      display: none; align-items: center; gap: 0.5rem;
+    }
+    .alert.show { display: flex; }
+    .alert.success { background: var(--green-light); color: var(--green-dark); }
+    .alert.error   { background: #fdecea; color: #c62828; }
+
+    /* ── SUBMIT BUTTON ── */
+    .btn-submit {
+      width: 100%; padding: 0.85rem;
+      background: var(--orange); color: white;
+      border: none; border-radius: 12px;
+      font-family: 'Raleway', sans-serif; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem; position: relative;
+    }
+    .btn-submit:hover:not(:disabled) { background: var(--orange-hover); transform: scale(1.02); }
+    .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
+    .btn-submit .spinner {
+      display: none; width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.4); border-top-color: white;
+      border-radius: 50%; animation: spin 0.6s linear infinite;
+      margin: 0 auto;
+    }
+    .btn-submit.loading .btn-text { display: none; }
+    .btn-submit.loading .spinner  { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin: 1.25rem 0; color: var(--muted); font-size: 0.8rem;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── FOOTER NOTE ── */
+    .form-footer {
+      text-align: center; margin-top: 1rem;
+      font-size: 0.82rem; color: var(--muted);
+    }
+    .form-footer a { color: var(--green); font-weight: 700; text-decoration: none; }
+    .form-footer a:hover { text-decoration: underline; }
+
+    /* ── SUCCESS STATE ── */
+    .success-screen {
+      display: none; flex-direction: column;
+      align-items: center; text-align: center; gap: 1rem;
+      padding: 1rem 0;
+    }
+    .success-screen.show { display: flex; }
+    .success-screen .checkmark { font-size: 4rem; animation: pop 0.4s ease; }
+    @keyframes pop {
+      0%  { transform: scale(0); }
+      70% { transform: scale(1.2); }
+      100%{ transform: scale(1); }
+    }
+    .success-screen h2 { font-size: 1.5rem; font-weight: 900; color: var(--green); }
+    .success-screen p  { color: var(--muted); font-size: 0.9rem; }
+    .success-screen .btn-home {
+      background: var(--green); color: white;
+      padding: 0.75rem 2rem; border: none; border-radius: 12px;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; transition: background 0.2s, transform 0.15s; margin-top: 0.5rem;
+    }
+    .success-screen .btn-home:hover { background: var(--green-dark); transform: scale(1.03); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 480px) {
+      .card { padding: 2rem 1.25rem; }
+      .row-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="./index.html">
+      <!-- Inline SVG fallback logo if asset not found -->
+      <img src="./assets/icons/logo.svg" alt="Veggie King Logo" style="height:38px;" />
+        <rect width="38" height="38" rx="8" fill="#2d7a2d"/>
+      </svg>
+    </a>
+    <a href="./index.html">← Back to Home</a>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="page">
+
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <div class="badge">🥦 100% Vegetarian</div>
+      <div class="emoji-row">🥗 🍔 🌯</div>
+      <h2>Healthy & Fresh Food Delivered</h2>
+      <p>Join thousands of happy customers enjoying our nutritious, delicious meals every day.</p>
+      <div class="features">
+        <div class="feature"><span class="icon">⚡</span> Fast delivery in 30 mins</div>
+        <div class="feature"><span class="icon">🎁</span> Exclusive offers for members</div>
+        <div class="feature"><span class="icon">🛵</span> Live order tracking</div>
+        <div class="feature"><span class="icon">💳</span> Secure payments</div>
+      </div>
+    </div>
+
+    <!-- CARD -->
+    <div class="card" id="authCard">
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab active" id="tabLogin"    onclick="switchTab('login')">Login</button>
+        <button class="tab"        id="tabRegister" onclick="switchTab('register')">Register</button>
+      </div>
+
+      <!-- ALERT -->
+      <div class="alert" id="alertBox"></div>
+
+      <!-- ── LOGIN FORM ── -->
+      <div id="loginForm">
+        <div class="form-header">
+          <h1>Welcome back 👋</h1>
+          <p>Login to your Veggie King account</p>
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrap">
+            <span class="icon">📧</span>
+            <input type="email" id="loginEmail" placeholder="you@email.com" />
+          </div>
+          <div class="field-error" id="loginEmailErr">Please enter a valid email</div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrap">
+            <span class="icon">🔒</span>
+            <input type="password" id="loginPassword" placeholder="Your password" />
+            <button class="toggle-pw" onclick="togglePw('loginPassword', this)">👁</button>
+          </div>
+          <div class="field-error" id="loginPasswordErr">Password is required</div>
+        </div>
+
+        <button class="btn-submit" id="loginBtn" onclick="handleLogin()">
+          <span class="btn-text">Login to My Account</span>
+          <div class="spinner"></div>
+        </button>
+
+        <div class="form-footer">
+          Don't have an account? <a href="#" onclick="switchTab('register')">Register free</a>
+        </div>
+      </div>
+
+      <!-- ── REGISTER FORM ── -->
+      <div id="registerForm" style="display:none;">
+        <div class="form-header">
+          <h1>Create account 🌱</h1>
+          <p>Join The Veggie King family today!</p>
+        </div>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label>Full Name</label>
+            <div class="input-wrap">
+              <span class="icon">👤</span>
+              <input type="text" id="regName" placeholder="Rahul Sharma" />
+            </div>
+            <div class="field-error" id="regNameErr">Name is required</div>
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <div class="input-wrap">
+              <span class="icon">📱</span>
+              <input type="tel" id="regPhone" placeholder="9876543210" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrap">
+            <span class="icon">📧</span>
+            <input type="email" id="regEmail" placeholder="you@email.com" />
+          </div>
+          <div class="field-error" id="regEmailErr">Please enter a valid email</div>
+        </div>
+
+        <div class="form-group">
+          <label>Delivery Address</label>
+          <div class="input-wrap">
+            <span class="icon">📍</span>
+            <input type="text" id="regAddress" placeholder="House no, Street, City" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-wrap">
+            <span class="icon">🔒</span>
+            <input type="password" id="regPassword" placeholder="Min. 6 characters" />
+            <button class="toggle-pw" onclick="togglePw('regPassword', this)">👁</button>
+          </div>
+          <div class="field-error" id="regPasswordErr">Password must be at least 6 characters</div>
+        </div>
+
+        <button class="btn-submit" id="registerBtn" onclick="handleRegister()">
+          <span class="btn-text">Create My Account</span>
+          <div class="spinner"></div>
+        </button>
+
+        <div class="form-footer">
+          Already have an account? <a href="#" onclick="switchTab('login')">Login here</a>
+        </div>
+      </div>
+
+      <!-- ── SUCCESS SCREEN ── -->
+      <div class="success-screen" id="successScreen">
+        <div class="checkmark">✅</div>
+        <h2 id="successTitle">Login Successful!</h2>
+        <p id="successMsg">Welcome back! Redirecting you to the menu...</p>
+        <button class="btn-home" onclick="window.location.href='./index.html'">Go to Homepage</button>
+      </div>
+
+    </div><!-- /card -->
+  </main>
+
+  <script>
+    const API = 'http://localhost:5000/api';
+
+    // ── Tab switching ──────────────────────────
+    function switchTab(tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('tabLogin').classList.toggle('active', isLogin);
+      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+      document.getElementById('loginForm').style.display    = isLogin ? 'block' : 'none';
+      document.getElementById('registerForm').style.display = isLogin ? 'none'  : 'block';
+      document.getElementById('successScreen').classList.remove('show');
+      hideAlert();
+    }
+
+    // ── Toggle password visibility ─────────────
+    function togglePw(id, btn) {
+      const input = document.getElementById(id);
+      if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+      else                           { input.type = 'password'; btn.textContent = '👁'; }
+    }
+
+    // ── Alert helpers ──────────────────────────
+    function showAlert(msg, type) {
+      const el = document.getElementById('alertBox');
+      el.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
+      el.className = `alert show ${type}`;
+    }
+    function hideAlert() {
+      document.getElementById('alertBox').className = 'alert';
+    }
+
+    // ── Field error helpers ────────────────────
+    function showErr(id)  { document.getElementById(id).classList.add('show'); }
+    function hideErr(id)  { document.getElementById(id).classList.remove('show'); }
+    function markErr(inputId, errId) {
+      document.getElementById(inputId).classList.add('error');
+      showErr(errId);
+    }
+    function clearErr(inputId, errId) {
+      document.getElementById(inputId).classList.remove('error');
+      hideErr(errId);
+    }
+
+    // ── Button loading state ───────────────────
+    function setLoading(btnId, loading) {
+      const btn = document.getElementById(btnId);
+      btn.disabled = loading;
+      btn.classList.toggle('loading', loading);
+    }
+
+    // ── Save token & user info ─────────────────
+    function saveSession(data) {
+      localStorage.setItem('vk_token', data.token);
+      localStorage.setItem('vk_user',  JSON.stringify(data.user));
+    }
+
+    // ── LOGIN ──────────────────────────────────
+    async function handleLogin() {
+      hideAlert();
+      const email    = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      let valid = true;
+      if (!email || !/\S+@\S+\.\S+/.test(email)) { markErr('loginEmail','loginEmailErr'); valid=false; }
+      else clearErr('loginEmail','loginEmailErr');
+      if (!password) { markErr('loginPassword','loginPasswordErr'); valid=false; }
+      else clearErr('loginPassword','loginPasswordErr');
+      if (!valid) return;
+
+      setLoading('loginBtn', true);
+      try {
+        const res  = await fetch(`${API}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          saveSession(data);
+          document.getElementById('loginForm').style.display = 'none';
+          document.getElementById('successTitle').textContent = `Welcome back, ${data.user.name}! 👋`;
+          document.getElementById('successMsg').textContent   = 'You are logged in. Redirecting to homepage...';
+          document.getElementById('successScreen').classList.add('show');
+          setTimeout(() => window.location.href = './index.html', 2000);
+        } else {
+          showAlert(data.message || 'Login failed. Please try again.', 'error');
+        }
+      } catch (err) {
+        showAlert('Cannot connect to server. Make sure backend is running.', 'error');
+      } finally {
+        setLoading('loginBtn', false);
+      }
+    }
+
+    // ── REGISTER ───────────────────────────────
+    async function handleRegister() {
+      hideAlert();
+      const name     = document.getElementById('regName').value.trim();
+      const phone    = document.getElementById('regPhone').value.trim();
+      const email    = document.getElementById('regEmail').value.trim();
+      const address  = document.getElementById('regAddress').value.trim();
+      const password = document.getElementById('regPassword').value;
+
+      let valid = true;
+      if (!name)                              { markErr('regName','regNameErr');     valid=false; }
+      else clearErr('regName','regNameErr');
+      if (!email || !/\S+@\S+\.\S+/.test(email)) { markErr('regEmail','regEmailErr'); valid=false; }
+      else clearErr('regEmail','regEmailErr');
+      if (!password || password.length < 6)  { markErr('regPassword','regPasswordErr'); valid=false; }
+      else clearErr('regPassword','regPasswordErr');
+      if (!valid) return;
+
+      setLoading('registerBtn', true);
+      try {
+        const res  = await fetch(`${API}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, email, address, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          saveSession(data);
+          document.getElementById('registerForm').style.display = 'none';
+          document.getElementById('successTitle').textContent = `Welcome, ${data.user.name}! 🎉`;
+          document.getElementById('successMsg').textContent   = 'Your account is created. Redirecting to homepage...';
+          document.getElementById('successScreen').classList.add('show');
+          setTimeout(() => window.location.href = '/index.html', 2000);
+        } else {
+          showAlert(data.message || 'Registration failed. Please try again.', 'error');
+        }
+      } catch (err) {
+        showAlert('Cannot connect to server. Make sure backend is running.', 'error');
+      } finally {
+        setLoading('registerBtn', false);
+      }
+    }
+
+    // ── Enter key support ──────────────────────
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      if (document.getElementById('loginForm').style.display !== 'none')    handleLogin();
+      else if (document.getElementById('registerForm').style.display !== 'none') handleRegister();
+    });
+
+    // ── If already logged in, redirect ────────
+    if (localStorage.getItem('vk_token')) {
+      const user = JSON.parse(localStorage.getItem('vk_user') || '{}');
+      if (user.id) window.location.href = '/index.html';
+    }
+  </script>
+</body>
+</html>

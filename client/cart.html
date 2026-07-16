@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart — The Veggie King</title>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green:       #2d7a2d;
+      --green-dark:  #1e5c1e;
+      --green-light: #e8f5e8;
+      --orange:      #ff4500;
+      --orange-hover:#e03d00;
+      --gray:        #f7f7f7;
+      --text:        #1a1a1a;
+      --muted:       #888;
+      --border:      #e0e0e0;
+      --shadow:      rgba(0,0,0,0.09);
+      --radius:      16px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Raleway', sans-serif; background: var(--gray); color: var(--text); }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed; top: 0; width: 100%; height: 70px;
+      background: white; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      box-shadow: 0 2px 12px var(--shadow);
+    }
+    .navbar img { height: 38px; }
+    .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--green); }
+
+    /* ── PAGE LAYOUT ── */
+    .page { max-width: 1100px; margin: 0 auto; padding: 90px 1.5rem 3rem; display: grid; grid-template-columns: 1fr 380px; gap: 1.5rem; align-items: start; }
+    @media (max-width: 860px) { .page { grid-template-columns: 1fr; } }
+
+    /* ── SECTION TITLE ── */
+    .sec-title { font-size: 1.3rem; font-weight: 900; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+    .sec-title span { color: var(--green); }
+
+    /* ── CARD BOX ── */
+    .box { background: white; border-radius: var(--radius); box-shadow: 0 2px 16px var(--shadow); padding: 1.5rem; }
+
+    /* ── CART ITEMS ── */
+    .cart-item {
+      display: flex; gap: 1rem; align-items: center;
+      padding: 1rem 0; border-bottom: 1px solid var(--border);
+      animation: fadeIn 0.3s ease;
+    }
+    .cart-item:last-child { border-bottom: none; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+    .item-img {
+      width: 70px; height: 70px; border-radius: 12px;
+      background: var(--green-light); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; overflow: hidden;
+    }
+    .item-img img { width: 100%; height: 100%; object-fit: cover; }
+
+    .item-info { flex: 1; }
+    .item-name { font-weight: 800; font-size: 0.95rem; }
+    .item-cat  { font-size: 0.75rem; color: var(--green); font-weight: 700; text-transform: uppercase; margin-top: 0.15rem; }
+    .item-price { font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; }
+
+    .item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+    .item-subtotal { font-size: 1rem; font-weight: 900; }
+
+    .qty-control { display: flex; align-items: center; gap: 0.5rem; }
+    .qty-btn {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 2px solid var(--green); background: white;
+      color: var(--green); font-size: 1rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .qty-btn:hover { background: var(--green); color: white; }
+    .qty-btn.del   { border-color: #e53935; color: #e53935; }
+    .qty-btn.del:hover { background: #e53935; color: white; }
+    .qty-num { font-weight: 800; font-size: 0.9rem; min-width: 18px; text-align: center; }
+
+    /* ── EMPTY CART ── */
+    .empty-cart {
+      text-align: center; padding: 3rem 1rem;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    }
+    .empty-cart .icon { font-size: 4rem; }
+    .empty-cart h3    { font-size: 1.2rem; font-weight: 900; }
+    .empty-cart p     { color: var(--muted); font-size: 0.9rem; }
+    .btn-menu {
+      background: var(--green); color: white;
+      padding: 0.75rem 2rem; border: none; border-radius: 12px;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; text-decoration: none; transition: background 0.2s;
+    }
+    .btn-menu:hover { background: var(--green-dark); }
+
+    /* ── ORDER SUMMARY ── */
+    .summary-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0; font-size: 0.9rem;
+    }
+    .summary-row.total {
+      border-top: 2px solid var(--border); margin-top: 0.5rem; padding-top: 0.75rem;
+      font-size: 1.1rem; font-weight: 900;
+    }
+    .summary-row .label { color: var(--muted); font-weight: 600; }
+    .summary-row .value { font-weight: 700; }
+    .summary-row.total .value { color: var(--green); font-size: 1.2rem; }
+    .discount-val { color: #e53935 !important; }
+
+    /* ── COUPON ── */
+    .coupon-wrap { display: flex; gap: 0.5rem; margin: 1rem 0; }
+    .coupon-wrap input {
+      flex: 1; padding: 0.6rem 1rem;
+      border: 2px solid var(--border); border-radius: 10px;
+      font-family: 'Raleway', sans-serif; font-size: 0.9rem;
+      outline: none; text-transform: uppercase; transition: border-color 0.2s;
+    }
+    .coupon-wrap input:focus { border-color: var(--green); }
+    .coupon-wrap input.valid   { border-color: var(--green); background: var(--green-light); }
+    .coupon-wrap input.invalid { border-color: #e53935; }
+    .btn-apply {
+      background: var(--green); color: white;
+      border: none; border-radius: 10px; padding: 0.6rem 1.1rem;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.85rem;
+      cursor: pointer; transition: background 0.2s; white-space: nowrap;
+    }
+    .btn-apply:hover { background: var(--green-dark); }
+    .btn-apply:disabled { opacity: 0.6; cursor: not-allowed; }
+    .coupon-msg { font-size: 0.8rem; font-weight: 700; margin-top: -0.5rem; margin-bottom: 0.5rem; }
+    .coupon-msg.success { color: var(--green); }
+    .coupon-msg.error   { color: #e53935; }
+
+    /* ── DELIVERY FORM ── */
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text); margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%; padding: 0.65rem 0.875rem;
+      border: 2px solid var(--border); border-radius: 10px;
+      font-family: 'Raleway', sans-serif; font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s;
+      background: var(--gray); color: var(--text);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--green); background: white; }
+    .form-group textarea { resize: vertical; min-height: 70px; }
+
+    /* ── PAYMENT OPTIONS ── */
+    .pay-options { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+    .pay-opt {
+      flex: 1; padding: 0.75rem;
+      border: 2px solid var(--border); border-radius: 12px;
+      cursor: pointer; text-align: center; transition: all 0.2s;
+      display: flex; flex-direction: column; align-items: center; gap: 0.25rem;
+    }
+    .pay-opt:hover { border-color: var(--green); }
+    .pay-opt.selected { border-color: var(--green); background: var(--green-light); }
+    .pay-opt .pi { font-size: 1.5rem; }
+    .pay-opt .pt { font-size: 0.75rem; font-weight: 700; }
+
+    /* ── PLACE ORDER BTN ── */
+    .btn-order {
+      width: 100%; padding: 1rem;
+      background: var(--orange); color: white;
+      border: none; border-radius: 12px;
+      font-family: 'Raleway', sans-serif; font-weight: 900; font-size: 1.05rem;
+      cursor: pointer; transition: background 0.2s, transform 0.15s;
+      margin-top: 0.5rem; position: relative;
+    }
+    .btn-order:hover:not(:disabled) { background: var(--orange-hover); transform: scale(1.02); }
+    .btn-order:disabled { opacity: 0.65; cursor: not-allowed; }
+    .btn-order .spinner {
+      display: none; width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.4); border-top-color: white;
+      border-radius: 50%; animation: spin 0.6s linear infinite; margin: 0 auto;
+    }
+    .btn-order.loading .btn-text { display: none; }
+    .btn-order.loading .spinner  { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SUCCESS OVERLAY ── */
+    .success-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      z-index: 500; display: none; align-items: center; justify-content: center;
+    }
+    .success-overlay.show { display: flex; }
+    .success-box {
+      background: white; border-radius: 24px; padding: 2.5rem 2rem;
+      text-align: center; max-width: 380px; width: 90%;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+      animation: popIn 0.4s ease;
+    }
+    @keyframes popIn {
+      0%  { transform: scale(0.7); opacity: 0; }
+      70% { transform: scale(1.05); }
+      100%{ transform: scale(1); opacity: 1; }
+    }
+    .success-box .big-icon { font-size: 4.5rem; }
+    .success-box h2 { font-size: 1.5rem; font-weight: 900; color: var(--green); }
+    .success-box p  { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+    .order-id-badge {
+      background: var(--green-light); color: var(--green-dark);
+      border-radius: 50px; padding: 0.4rem 1.2rem;
+      font-weight: 800; font-size: 0.9rem;
+    }
+    .success-btns { display: flex; gap: 0.75rem; width: 100%; }
+    .success-btns a {
+      flex: 1; padding: 0.75rem; border-radius: 12px;
+      font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.9rem;
+      text-decoration: none; text-align: center; transition: opacity 0.2s;
+    }
+    .success-btns a:first-child { background: var(--green); color: white; }
+    .success-btns a:last-child  { background: var(--gray); color: var(--text); }
+    .success-btns a:hover { opacity: 0.85; }
+
+    /* ── ALERT ── */
+    .alert {
+      padding: 0.75rem 1rem; border-radius: 10px;
+      font-size: 0.88rem; font-weight: 600; margin-bottom: 1rem;
+      display: none; align-items: center; gap: 0.5rem;
+    }
+    .alert.show    { display: flex; }
+    .alert.error   { background: #fdecea; color: #c62828; }
+    .alert.success { background: var(--green-light); color: var(--green-dark); }
+
+    /* ── SKELETON ── */
+    .skeleton { background: #e0e0e0; border-radius: 8px; animation: shimmer 1.2s infinite; }
+    @keyframes shimmer { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* ── NOT LOGGED IN ── */
+    .not-logged {
+      text-align: center; padding: 4rem 1rem;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    }
+    .not-logged .icon { font-size: 3.5rem; }
+    .not-logged h3 { font-size: 1.2rem; font-weight: 900; }
+    .not-logged p  { color: var(--muted); font-size: 0.9rem; }
+
+    @media (max-width: 500px) {
+      .pay-options { flex-direction: column; }
+      .success-btns { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="./index.html">
+      <img src="./assets/icons/logo.svg" alt="Veggie King" onerror="this.style.display='none'"/>
+    </a>
+    <ul class="nav-links">
+      <li><a href="./index.html#about-us">About Us</a></li>
+      <li><a href="./menu.html">Menu</a></li>
+      <li><a href="./index.html#contact">Contact</a></li>
+      <li><a href="./auth.html" id="navAuthLink">Login</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE -->
+  <div class="page" id="mainPage">
+
+    <!-- LEFT: CART ITEMS -->
+    <div>
+      <div class="sec-title">🛒 Your <span>Cart</span></div>
+      <div class="box" id="cartBox">
+        <!-- filled by JS -->
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div style="display:flex;gap:1rem;align-items:center;padding:1rem 0;border-bottom:1px solid var(--border);">
+            <div class="skeleton" style="width:70px;height:70px;border-radius:12px;flex-shrink:0;"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:0.5rem;">
+              <div class="skeleton" style="height:14px;width:60%;border-radius:6px;"></div>
+              <div class="skeleton" style="height:12px;width:40%;border-radius:6px;"></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:1rem;align-items:center;padding:1rem 0;">
+            <div class="skeleton" style="width:70px;height:70px;border-radius:12px;flex-shrink:0;"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:0.5rem;">
+              <div class="skeleton" style="height:14px;width:70%;border-radius:6px;"></div>
+              <div class="skeleton" style="height:12px;width:45%;border-radius:6px;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY + FORM -->
+    <div style="display:flex;flex-direction:column;gap:1.25rem;">
+
+      <!-- ORDER SUMMARY -->
+      <div class="box" id="summaryBox">
+        <div class="sec-title">🧾 Order <span>Summary</span></div>
+
+        <!-- COUPON -->
+        <div class="coupon-wrap">
+          <input type="text" id="couponInput" placeholder="COUPON CODE" maxlength="20"/>
+          <button class="btn-apply" id="applyBtn" onclick="applyCoupon()">Apply</button>
+        </div>
+        <div class="coupon-msg" id="couponMsg"></div>
+
+        <div class="summary-row"><span class="label">Subtotal</span><span class="value" id="subtotalVal">₹0</span></div>
+        <div class="summary-row" id="discountRow" style="display:none;"><span class="label">Discount</span><span class="value discount-val" id="discountVal">-₹0</span></div>
+        <div class="summary-row"><span class="label">Delivery</span><span class="value" style="color:var(--green);font-weight:800;">FREE</span></div>
+        <div class="summary-row total"><span>Total</span><span class="value" id="totalVal">₹0</span></div>
+      </div>
+
+      <!-- DELIVERY + PAYMENT FORM -->
+      <div class="box" id="checkoutBox">
+        <div class="sec-title">📍 Delivery <span>Details</span></div>
+
+        <div class="alert" id="alertBox"></div>
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="delName" placeholder="Your name"/>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="delPhone" placeholder="9876543210"/>
+        </div>
+        <div class="form-group">
+          <label>Delivery Address</label>
+          <textarea id="delAddress" placeholder="House no, Street, Area, City"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Order Notes (optional)</label>
+          <input type="text" id="delNotes" placeholder="Extra spicy, no onions, etc."/>
+        </div>
+
+        <div class="sec-title" style="margin-top:0.5rem;">💳 Payment <span>Method</span></div>
+        <div class="pay-options">
+          <div class="pay-opt selected" id="pay-cod" onclick="selectPayment('cod')">
+            <div class="pi">💵</div>
+            <div class="pt">Cash on Delivery</div>
+          </div>
+          <div class="pay-opt" id="pay-online" onclick="selectPayment('online')">
+            <div class="pi">📱</div>
+            <div class="pt">Pay Online</div>
+          </div>
+        </div>
+
+        <button class="btn-order" id="orderBtn" onclick="placeOrder()">
+          <span class="btn-text">🛵 Place Order</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUCCESS OVERLAY -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-box">
+      <div class="big-icon">🎉</div>
+      <h2>Order Placed!</h2>
+      <p>Your delicious food is being prepared. We'll deliver it fresh to your door!</p>
+      <div class="order-id-badge" id="orderIdBadge">Order #0</div>
+      <p style="font-size:0.8rem;color:var(--muted);">Estimated delivery: <strong>30-45 minutes</strong></p>
+      <div class="success-btns">
+        <a href="./tracking.html" id="trackLink">Track Order</a>
+        <a href="./menu.html">Order More</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API   = 'http://localhost:5000/api';
+    const token = localStorage.getItem('vk_token');
+    const user  = JSON.parse(localStorage.getItem('vk_user') || '{}');
+
+    let cartItems     = [];
+    let subtotal      = 0;
+    let discountAmount = 0;
+    let appliedOffer  = null;
+    let paymentMethod = 'cod';
+    let lastOrderId   = null;
+
+    // ── Init ──────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      setupNavAuth();
+      if (!token) { showNotLoggedIn(); return; }
+      prefillUser();
+      loadCart();
+    });
+
+    function setupNavAuth() {
+      const link = document.getElementById('navAuthLink');
+      if (user && user.name) {
+        link.textContent = '👤 ' + user.name.split(' ')[0];
+        link.href = '#';
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          if (confirm('Logout?')) { localStorage.removeItem('vk_token'); localStorage.removeItem('vk_user'); window.location.href = './auth.html'; }
+        });
+      }
+    }
+
+    function prefillUser() {
+      if (user.name)    document.getElementById('delName').value    = user.name;
+      if (user.phone)   document.getElementById('delPhone').value   = user.phone;
+      if (user.address) document.getElementById('delAddress').value = user.address;
+    }
+
+    function showNotLoggedIn() {
+      document.getElementById('mainPage').innerHTML = `
+        <div class="not-logged" style="grid-column:1/-1;">
+          <div class="icon">🔒</div>
+          <h3>Please Login First</h3>
+          <p>You need to be logged in to view your cart and place orders.</p>
+          <a href="./auth.html" class="btn-menu">Login / Register</a>
+        </div>`;
+    }
+
+    // ── Load cart ─────────────────────────────
+    async function loadCart() {
+      try {
+        const res  = await fetch(`${API}/cart`, { headers: { Authorization: `Bearer ${token}` } });
+        const data = await res.json();
+        cartItems  = data.cart || [];
+        subtotal   = parseFloat(data.total) || 0;
+        renderCart();
+        updateSummary();
+      } catch(e) {
+        document.getElementById('cartBox').innerHTML =
+          `<div class="empty-cart"><div class="icon">⚠️</div><h3>Error loading cart</h3><p>Make sure backend is running</p></div>`;
+      }
+    }
+
+    // ── Render cart items ─────────────────────
+    function renderCart() {
+      const box = document.getElementById('cartBox');
+      if (!cartItems.length) {
+        box.innerHTML = `
+          <div class="empty-cart">
+            <div class="icon">🛒</div>
+            <h3>Your cart is empty</h3>
+            <p>Add some delicious items from our menu!</p>
+            <a href="./menu.html" class="btn-menu">Browse Menu</a>
+          </div>`;
+        document.getElementById('orderBtn').disabled = true;
+        return;
+      }
+
+      box.innerHTML = cartItems.map(item => `
+        <div class="cart-item" id="ci-${item.menu_item_id}">
+          <div class="item-img">
+            ${item.image_url
+              ? `<img src="${item.image_url}" alt="${item.name}" onerror="this.parentElement.innerHTML='🥦'"/>`
+              : getCatEmoji(item.name)}
+          </div>
+          <div class="item-info">
+            <div class="item-name">${item.name}</div>
+            <div class="item-price">₹${item.price} each</div>
+          </div>
+          <div class="item-right">
+            <div class="item-subtotal">₹${(item.price * item.quantity).toFixed(2)}</div>
+            <div class="qty-control">
+              <button class="qty-btn del" onclick="changeQty(${item.menu_item_id}, -1)" title="Remove">−</button>
+              <span class="qty-num" id="qn-${item.menu_item_id}">${item.quantity}</span>
+              <button class="qty-btn" onclick="changeQty(${item.menu_item_id}, 1)">+</button>
+            </div>
+          </div>
+        </div>`).join('');
+    }
+
+    function getCatEmoji(name) {
+      const n = name.toLowerCase();
+      if (n.includes('burger')) return '🍔';
+      if (n.includes('salad'))  return '🥗';
+      if (n.includes('wrap'))   return '🌯';
+      if (n.includes('drink') || n.includes('smoothie')) return '🥤';
+      if (n.includes('brownie') || n.includes('dessert')) return '🍮';
+      return '🥦';
+    }
+
+    // ── Change qty ────────────────────────────
+    async function changeQty(menuItemId, delta) {
+      const item = cartItems.find(i => i.menu_item_id === menuItemId);
+      if (!item) return;
+      const newQty = item.quantity + delta;
+
+      if (newQty <= 0) {
+        if (!confirm(`Remove "${item.name}" from cart?`)) return;
+        await fetch(`${API}/cart/${menuItemId}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+        cartItems = cartItems.filter(i => i.menu_item_id !== menuItemId);
+      } else {
+        await fetch(`${API}/cart/${menuItemId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ quantity: newQty })
+        });
+        item.quantity = newQty;
+      }
+
+      subtotal = cartItems.reduce((s, i) => s + i.price * i.quantity, 0);
+      // Reset coupon if cart changes
+      appliedOffer = null; discountAmount = 0;
+      document.getElementById('couponInput').value = '';
+      document.getElementById('couponInput').className = '';
+      document.getElementById('couponMsg').textContent = '';
+      document.getElementById('discountRow').style.display = 'none';
+
+      renderCart();
+      updateSummary();
+    }
+
+    // ── Apply coupon ──────────────────────────
+    async function applyCoupon() {
+      const code = document.getElementById('couponInput').value.trim();
+      if (!code) return;
+      const btn = document.getElementById('applyBtn');
+      btn.disabled = true; btn.textContent = '...';
+      try {
+        const res  = await fetch(`${API}/offers/validate`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ code, cart_total: subtotal })
+        });
+        const data = await res.json();
+        const input = document.getElementById('couponInput');
+        const msg   = document.getElementById('couponMsg');
+
+        if (data.success) {
+          appliedOffer  = data.offer;
+          discountAmount = parseFloat(data.offer.discount_amount);
+          input.className = 'valid';
+          msg.className   = 'coupon-msg success';
+          msg.textContent = `✅ ${data.message} — You save ₹${discountAmount.toFixed(2)}!`;
+          document.getElementById('discountRow').style.display = 'flex';
+        } else {
+          appliedOffer = null; discountAmount = 0;
+          input.className = 'invalid';
+          msg.className   = 'coupon-msg error';
+          msg.textContent = '❌ ' + data.message;
+          document.getElementById('discountRow').style.display = 'none';
+        }
+        updateSummary();
+      } catch(e) {
+        document.getElementById('couponMsg').textContent = '❌ Could not validate coupon';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Apply';
+      }
+    }
+
+    // ── Update summary ────────────────────────
+    function updateSummary() {
+      const total = Math.max(0, subtotal - discountAmount);
+      document.getElementById('subtotalVal').textContent  = `₹${subtotal.toFixed(2)}`;
+      document.getElementById('discountVal').textContent  = `-₹${discountAmount.toFixed(2)}`;
+      document.getElementById('totalVal').textContent     = `₹${total.toFixed(2)}`;
+    }
+
+    // ── Payment method ────────────────────────
+    function selectPayment(method) {
+      paymentMethod = method;
+      document.querySelectorAll('.pay-opt').forEach(el => el.classList.remove('selected'));
+      document.getElementById(`pay-${method}`).classList.add('selected');
+    }
+
+    // ── Alerts ────────────────────────────────
+    function showAlert(msg, type) {
+      const el = document.getElementById('alertBox');
+      el.textContent = (type === 'error' ? '❌ ' : '✅ ') + msg;
+      el.className = `alert show ${type}`;
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function hideAlert() { document.getElementById('alertBox').className = 'alert'; }
+
+    // ── Place order ───────────────────────────
+    async function placeOrder() {
+      hideAlert();
+      const name    = document.getElementById('delName').value.trim();
+      const phone   = document.getElementById('delPhone').value.trim();
+      const address = document.getElementById('delAddress').value.trim();
+      const notes   = document.getElementById('delNotes').value.trim();
+
+      if (!name)    { showAlert('Please enter your name', 'error'); return; }
+      if (!phone)   { showAlert('Please enter your phone number', 'error'); return; }
+      if (!address) { showAlert('Please enter your delivery address', 'error'); return; }
+      if (!cartItems.length) { showAlert('Your cart is empty!', 'error'); return; }
+
+      const btn = document.getElementById('orderBtn');
+      btn.disabled = true; btn.classList.add('loading');
+
+      try {
+        // 1. Place order
+        const res  = await fetch(`${API}/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            delivery_address: `${name}, ${phone} — ${address}`,
+            payment_method: paymentMethod === 'cod' ? 'cod' : 'online',
+            offer_code: appliedOffer ? appliedOffer.code : undefined,
+            notes
+          })
+        });
+        const data = await res.json();
+
+        if (!data.success) { showAlert(data.message || 'Order failed', 'error'); return; }
+
+        lastOrderId = data.order.id;
+
+        // 2. Confirm payment
+        if (paymentMethod === 'cod') {
+          await fetch(`${API}/payments/cod`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ order_id: lastOrderId })
+          });
+          showSuccess();
+        } else {
+          // Razorpay online payment
+          await initiateRazorpay(lastOrderId);
+        }
+      } catch(e) {
+        showAlert('Could not place order. Check backend connection.', 'error');
+      } finally {
+        btn.disabled = false; btn.classList.remove('loading');
+      }
+    }
+
+    // ── Razorpay ──────────────────────────────
+    async function initiateRazorpay(orderId) {
+      const rzRes  = await fetch(`${API}/payments/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ order_id: orderId })
+      });
+      const rzData = await rzRes.json();
+      if (!rzData.success) { showAlert('Payment init failed', 'error'); return; }
+
+      const options = {
+        key:      rzData.key_id,
+        amount:   rzData.amount,
+        currency: rzData.currency,
+        name:     'The Veggie King',
+        description: `Order #${orderId}`,
+        order_id: rzData.razorpay_order_id,
+        handler: async (response) => {
+          const verRes  = await fetch(`${API}/payments/verify`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ ...response, order_id: orderId })
+          });
+          const verData = await verRes.json();
+          if (verData.success) showSuccess();
+          else showAlert('Payment verification failed', 'error');
+        },
+        prefill: { name: user.name, contact: user.phone },
+        theme: { color: '#2d7a2d' }
+      };
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    }
+
+    // ── Show success ──────────────────────────
+    function showSuccess() {
+      document.getElementById('orderIdBadge').textContent = `Order #${lastOrderId}`;
+      document.getElementById('trackLink').href = `./tracking.html?order=${lastOrderId}`;
+      document.getElementById('successOverlay').classList.add('show');
+      cartItems = [];
+    }
+  </script>
+</body>
+</html>
