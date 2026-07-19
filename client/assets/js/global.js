@@ -37,14 +37,12 @@ function injectNavbar() {
       <div class="nav-container">
         <a href="./index.html" class="logo">
           <img src="./assets/icons/logo.svg" alt="The Veggie King Logo" />
-          <span class="logo-text">The Veggie <span>King</span></span>
         </a>
         
         <ul class="nav-links">
-          <li><a href="./index.html" class="${isPageActive("index.html") || isPageActive("/") ? "active" : ""}">Home</a></li>
+          <li><a href="./index.html#about-us">About Us</a></li>
           <li><a href="./menu.html" class="${isPageActive("menu.html") ? "active" : ""}">Menu</a></li>
-          <li><a href="./about.html" class="${isPageActive("about.html") ? "active" : ""}">About Us</a></li>
-          <li><a href="./contact.html" class="${isPageActive("contact.html") ? "active" : ""}">Contact</a></li>
+          <li><a href="./index.html#contact">Contact</a></li>
         </ul>
 
         <div class="nav-actions">
@@ -70,14 +68,13 @@ function injectNavbar() {
     </nav>
     <div class="mobile-drawer" id="mobileDrawer">
       <div class="drawer-header">
-        <span class="logo-text">The Veggie <span>King</span></span>
+        <img src="./assets/icons/logo.svg" alt="The Veggie King Logo" style="height: 35px;" />
         <button class="drawer-close" id="drawerClose">&times;</button>
       </div>
       <ul class="drawer-links">
-        <li><a href="./index.html">Home</a></li>
+        <li><a href="./index.html#about-us">About Us</a></li>
         <li><a href="./menu.html">Menu</a></li>
-        <li><a href="./about.html">About Us</a></li>
-        <li><a href="./contact.html">Contact</a></li>
+        <li><a href="./index.html#contact">Contact</a></li>
         <li><a href="./wishlist.html">My Wishlist</a></li>
         <li><a href="./cart.html">My Cart</a></li>
         <li class="divider"></li>
