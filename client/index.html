@@ -12,21 +12,21 @@
     <div id="navbar-placeholder"></div>
 
     <!-- Hero Section Start -->
-    <section class="hero-home" style="margin-top: 80px; position: relative; background: radial-gradient(circle at 80% 50%, var(--primary-light) 0%, transparent 60%); overflow: hidden; min-height: calc(100vh - 80px); display: flex; align-items: center;">
-      <div class="container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; padding: 40px 20px;">
-        <div class="hero-left-content" style="display: flex; flex-direction: column; gap: 20px; text-align: left;">
-          <span style="background-color: var(--primary-light); color: var(--primary); padding: 6px 16px; border-radius: 20px; font-weight: 700; width: fit-content; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">🥦 100% Organic & Fresh</span>
-          <h1 style="font-size: 3.5rem; font-weight: 900; line-height: 1.2; color: var(--text-main);">Healthy & Fresh Food <span style="color: var(--primary);">For You</span></h1>
-          <p style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.6;">Created for lovers of Healthy, Delicious & Non-Obvious Veg food. Pick fresh meals prepared by expert chefs.</p>
-          <div style="display: flex; gap: 15px; margin-top: 10px;">
-            <a href="./menu.html" class="btn-primary" style="padding: 14px 30px; font-size: 1.05rem;">Explore Menu 🍽️</a>
-            <a href="./about.html" class="btn-outline" style="padding: 12px 28px; font-size: 1.05rem;">Learn More</a>
+    <section class="hero-home">
+      <div class="container hero-grid">
+        <div class="hero-left-content">
+          <span class="badge-promo">🥦 100% Organic & Fresh</span>
+          <h1>Healthy & Fresh Food <span>For You</span></h1>
+          <p>Created for lovers of Healthy, Delicious & Non-Obvious Veg food. Pick fresh meals prepared by expert chefs.</p>
+          <div style="display: flex; gap: 15px;" class="mt-10">
+            <a href="./menu.html" class="btn-primary">Explore Menu 🍽️</a>
+            <a href="./about.html" class="btn-outline">Learn More</a>
           </div>
         </div>
-        <div class="hero-right-content" style="position: relative; display: flex; justify-content: center; align-items: center;">
-          <div style="width: 100%; max-width: 450px; position: relative;">
-            <img class="hero-plate1" src="./assets/images/hero-section-slide-food-1.png" alt="Delicious Salad Bowl" style="width: 100%; height: auto; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15)); border-radius: 50%;" />
-            <img class="mirch" src="./assets/images/hero-section-food.png" alt="Chili Decoration" style="position: absolute; bottom: 0; left: -20px; width: 100px; animation: bounce 3s ease-in-out infinite;" />
+        <div class="hero-right-content">
+          <div class="hero-img-box">
+            <img class="hero-plate1" src="./assets/images/hero-section-slide-food-1.png" alt="Delicious Salad Bowl" />
+            <img class="mirch" src="./assets/images/hero-section-food.png" alt="Chili Decoration" />
           </div>
         </div>
       </div>
@@ -36,11 +36,11 @@
     <!-- Featured Categories Start -->
     <section class="section-padding" style="background-color: white;">
       <div class="container">
-        <div style="text-align: center; margin-bottom: 50px;">
-          <span style="color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem;">Categories</span>
-          <h2 style="font-size: 2.2rem; font-weight: 800; margin-top: 10px; color: var(--text-main);">Browse by Category</h2>
+        <div class="text-center mb-50">
+          <span class="section-tag">Categories</span>
+          <h2>Browse by Category</h2>
         </div>
-        <div id="homeCategoriesGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px;">
+        <div id="homeCategoriesGrid" class="category-grid">
           <!-- Categories loaded dynamically from JS -->
         </div>
       </div>
@@ -50,15 +50,15 @@
     <!-- Popular Foods Start -->
     <section class="section-padding">
       <div class="container">
-        <div style="text-align: center; margin-bottom: 50px;">
-          <span style="color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem;">Fresh & Healthy</span>
-          <h2 style="font-size: 2.2rem; font-weight: 800; margin-top: 10px; color: var(--text-main);">Our Popular Foods</h2>
+        <div class="text-center mb-50">
+          <span class="section-tag">Fresh & Healthy</span>
+          <h2>Our Popular Foods</h2>
         </div>
-        <div id="homePopularGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+        <div id="homePopularGrid" class="products-grid">
           <!-- Popular Foods loaded dynamically from JS -->
         </div>
-        <div style="text-align: center; margin-top: 40px;">
-          <a href="./menu.html" class="btn-outline" style="padding: 12px 30px;">View Full Menu 🍽️</a>
+        <div class="text-center mt-40">
+          <a href="./menu.html" class="btn-outline">View Full Menu 🍽️</a>
         </div>
       </div>
     </section>
@@ -67,30 +67,30 @@
     <!-- Why Choose Us Start -->
     <section class="section-padding" style="background-color: white;">
       <div class="container">
-        <div style="text-align: center; margin-bottom: 50px;">
-          <span style="color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem;">Our Features</span>
-          <h2 style="font-size: 2.2rem; font-weight: 800; margin-top: 10px; color: var(--text-main);">Why Choose Us</h2>
+        <div class="text-center mb-50">
+          <span class="section-tag">Our Features</span>
+          <h2>Why Choose Us</h2>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
-          <div style="background-color: var(--gray-light); padding: 30px; border-radius: var(--radius-card); text-align: center; border: 1px solid var(--border-color); transition: var(--transition);" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
-            <div style="font-size: 3rem; margin-bottom: 15px;">🥬</div>
-            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 10px;">Fresh Ingredients</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">100% natural, pesticide-free vegetables handpicked every morning from local farms.</p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feat-icon">🥬</div>
+            <h3>Fresh Ingredients</h3>
+            <p>100% natural, pesticide-free vegetables handpicked every morning from local farms.</p>
           </div>
-          <div style="background-color: var(--gray-light); padding: 30px; border-radius: var(--radius-card); text-align: center; border: 1px solid var(--border-color); transition: var(--transition);" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
-            <div style="font-size: 3rem; margin-bottom: 15px;">🥗</div>
-            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 10px;">Healthy Meals</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Expert dietitian-designed dishes optimized for balanced nutrition and taste.</p>
+          <div class="feature-card">
+            <div class="feat-icon">🥗</div>
+            <h3>Healthy Meals</h3>
+            <p>Expert dietitian-designed dishes optimized for balanced nutrition and taste.</p>
           </div>
-          <div style="background-color: var(--gray-light); padding: 30px; border-radius: var(--radius-card); text-align: center; border: 1px solid var(--border-color); transition: var(--transition);" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
-            <div style="font-size: 3rem; margin-bottom: 15px;">⚡</div>
-            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 10px;">Fast Delivery</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Hot and fresh meals delivered straight to your doorstep within 30 to 45 minutes.</p>
+          <div class="feature-card">
+            <div class="feat-icon">⚡</div>
+            <h3>Fast Delivery</h3>
+            <p>Hot and fresh meals delivered straight to your doorstep within 30 to 45 minutes.</p>
           </div>
-          <div style="background-color: var(--gray-light); padding: 30px; border-radius: var(--radius-card); text-align: center; border: 1px solid var(--border-color); transition: var(--transition);" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
-            <div style="font-size: 3rem; margin-bottom: 15px;">⭐</div>
-            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 10px;">Best Quality</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Strict kitchen hygiene standards and recipes prepared with pure olive oil.</p>
+          <div class="feature-card">
+            <div class="feat-icon">⭐</div>
+            <h3>Best Quality</h3>
+            <p>Strict kitchen hygiene standards and recipes prepared with pure olive oil.</p>
           </div>
         </div>
       </div>
@@ -100,15 +100,15 @@
     <!-- About-Us Section Start -->
     <section class="section-padding">
       <div class="container">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;">
+        <div class="two-col-grid">
           <div>
             <img src="./assets/images/about-us-section-food.png" alt="Fresh Salad Dish" style="width: 100%; height: auto; max-width: 480px; border-radius: var(--radius-card); filter: drop-shadow(0 15px 25px rgba(0,0,0,0.1));" />
           </div>
           <div style="display: flex; flex-direction: column; gap: 20px;">
-            <span style="color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem;">A Few Words About Us</span>
-            <h2 style="font-size: 2.5rem; font-weight: 800; color: var(--text-main); line-height: 1.2;">We Are The Veggie King</h2>
-            <p style="color: var(--text-muted); font-size: 1.05rem;">Our restaurant is a haven where you can enjoy a variety of delicious and healthy food made with love and care. We are passionate about providing our customers with an unforgettable dining experience.</p>
-            <p style="color: var(--text-muted); font-size: 1.05rem;">Using local, organic, and clean produce, we make sure that every dish you eat makes you feel satisfied and nourished.</p>
+            <span class="section-tag">A Few Words About Us</span>
+            <h2>We Are The Veggie King</h2>
+            <p>Our restaurant is a haven where you can enjoy a variety of delicious and healthy food made with love and care. We are passionate about providing our customers with an unforgettable dining experience.</p>
+            <p>Using local, organic, and clean produce, we make sure that every dish you eat makes you feel satisfied and nourished.</p>
             <a href="./about.html" class="btn-primary" style="width: fit-content; margin-top: 10px;">Read Our Story</a>
           </div>
         </div>
@@ -119,11 +119,11 @@
     <!-- Testimonials Section Start -->
     <section class="section-padding" style="background-color: white;">
       <div class="container">
-        <div style="text-align: center; margin-bottom: 50px;">
-          <span style="color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.9rem;">Customer Reviews</span>
-          <h2 style="font-size: 2.2rem; font-weight: 800; margin-top: 10px; color: var(--text-main);">What Our Clients Say</h2>
+        <div class="text-center mb-50">
+          <span class="section-tag">Customer Reviews</span>
+          <h2>What Our Clients Say</h2>
         </div>
-        <div id="homeTestimonialsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+        <div id="homeTestimonialsGrid" class="products-grid">
           <!-- Testimonials loaded dynamically -->
         </div>
       </div>
@@ -201,15 +201,15 @@
         if (!grid) return;
 
         grid.innerHTML = VK_DATA.testimonials.map(t => `
-          <div style="background-color: var(--gray-light); padding: 30px; border-radius: var(--radius-card); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 15px;">
-            <div style="display: flex; align-items: center; gap: 15px;">
-              <img src="${t.imageUrl}" alt="${t.name}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;" onerror="this.src='./assets/images/gallery-photo-6.png'" />
+          <div class="testimonial-card">
+            <div class="testimonial-header">
+              <img class="testimonial-img" src="${t.imageUrl}" alt="${t.name}" onerror="this.src='./assets/images/gallery-photo-6.png'" />
               <div>
-                <h4 style="font-weight: 700; color: var(--text-main);">${t.name}</h4>
-                <div style="color: #ffb800; font-size: 0.9rem;">${"⭐".repeat(t.rating)}</div>
+                <h4 class="testimonial-name">${t.name}</h4>
+                <div class="testimonial-stars">${"⭐".repeat(t.rating)}</div>
               </div>
             </div>
-            <p style="color: var(--text-muted); font-style: italic; font-size: 0.95rem;">"${t.review}"</p>
+            <p class="testimonial-text">"${t.review}"</p>
           </div>
         `).join("");
       }
@@ -238,12 +238,5 @@
         updateNavState();
       }
     </script>
-
-    <style>
-      @keyframes bounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-      }
-    </style>
   </body>
 </html>

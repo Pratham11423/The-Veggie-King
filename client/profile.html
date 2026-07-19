@@ -19,54 +19,54 @@
 
   <!-- Profile Layout -->
   <div class="container section-padding" style="padding-top: 40px;">
-    <div style="display: grid; grid-template-columns: 250px 1fr; gap: 30px; align-items: start;">
+    <div class="sidebar-layout">
       
       <!-- Profile Navigation Sidebar -->
-      <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-card); padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+      <div class="sidebar-box">
         <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 15px;">
-          <div style="font-size: 3.5rem; margin-bottom: 10px;">👤</div>
-          <h3 style="font-weight: 800; color: var(--text-main);" id="sidebarUserTitle">User</h3>
-          <p style="font-size: 0.85rem; color: var(--text-muted);" id="sidebarUserEmail">user@example.com</p>
+          <div class="sidebar-avatar">👤</div>
+          <h3 id="sidebarUserTitle">User</h3>
+          <p id="sidebarUserEmail">user@example.com</p>
         </div>
         
-        <a href="./profile.html" style="background-color: var(--primary-light); color: var(--primary); font-weight: 700; padding: 12px 15px; border-radius: 8px;">My Profile Settings</a>
-        <a href="./orders.html" style="font-weight: 600; padding: 12px 15px; border-radius: 8px; color: var(--text-muted);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">My Orders</a>
-        <a href="./wishlist.html" style="font-weight: 600; padding: 12px 15px; border-radius: 8px; color: var(--text-muted);" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-muted)'">Wishlist</a>
+        <a href="./profile.html" class="sidebar-link active">My Profile Settings</a>
+        <a href="./orders.html" class="sidebar-link">My Orders</a>
+        <a href="./wishlist.html" class="sidebar-link">Wishlist</a>
         <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 10px 0;" />
-        <a href="#" onclick="handleLogout()" style="font-weight: 700; padding: 12px 15px; border-radius: 8px; color: var(--secondary);">Log Out</a>
+        <a href="#" onclick="handleLogout()" class="sidebar-logout">Log Out</a>
       </div>
 
       <!-- Settings Form -->
-      <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-card); padding: 30px;">
-        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;">Personal Details</h2>
+      <div class="content-box">
+        <h2 class="content-box-title">Personal Details</h2>
         
-        <form id="profileForm" onsubmit="handleProfileUpdate(event)" style="display: flex; flex-direction: column; gap: 20px;">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div>
-              <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem;">Full Name</label>
-              <input type="text" id="profName" required style="width: 100%; padding: 12px; border-radius: var(--radius-input); border: 1px solid var(--border-color); font-size: 0.95rem;" />
+        <form id="profileForm" onsubmit="handleProfileUpdate(event)">
+          <div class="form-group-row">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="profName" required class="form-control" />
             </div>
-            <div>
-              <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem;">Email Address (Cannot change)</label>
-              <input type="email" id="profEmail" disabled style="width: 100%; padding: 12px; border-radius: var(--radius-input); border: 1px solid var(--border-color); font-size: 0.95rem; background-color: var(--gray-light); color: var(--text-muted);" />
-            </div>
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div>
-              <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem;">Phone Number</label>
-              <input type="tel" id="profPhone" required style="width: 100%; padding: 12px; border-radius: var(--radius-input); border: 1px solid var(--border-color); font-size: 0.95rem;" />
-            </div>
-            <div>
-              <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem;">Country / Region</label>
-              <input type="text" value="India" disabled style="width: 100%; padding: 12px; border-radius: var(--radius-input); border: 1px solid var(--border-color); font-size: 0.95rem; background-color: var(--gray-light); color: var(--text-muted);" />
+            <div class="form-group">
+              <label>Email Address (Cannot change)</label>
+              <input type="email" id="profEmail" disabled class="form-control" />
             </div>
           </div>
-          <div>
-            <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem;">Default Delivery Address</label>
-            <textarea id="profAddress" rows="4" placeholder="Enter street address, building, apartment details..." style="width: 100%; padding: 12px; border-radius: var(--radius-input); border: 1px solid var(--border-color); font-size: 0.95rem; font-family: inherit; resize: none;"></textarea>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" id="profPhone" required class="form-control" />
+            </div>
+            <div class="form-group">
+              <label>Country / Region</label>
+              <input type="text" value="India" disabled class="form-control" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Default Delivery Address</label>
+            <textarea id="profAddress" rows="4" placeholder="Enter street address, building, apartment details..." class="form-control"></textarea>
           </div>
           
-          <button type="submit" class="btn-primary" style="padding: 12px 25px; font-weight: 700; width: fit-content; align-self: flex-start;">Save Profile Updates</button>
+          <button type="submit" class="btn-primary" style="width: fit-content; align-self: flex-start;">Save Profile Updates</button>
         </form>
       </div>
 
@@ -100,29 +100,28 @@
       document.getElementById("profAddress").value = user.address || "";
     });
 
-    async function handleProfileUpdate(e) {
+    function handleProfileUpdate(e) {
       e.preventDefault();
-      const name = document.getElementById("profName").value.trim();
-      const phone = document.getElementById("profPhone").value.trim();
-      const address = document.getElementById("profAddress").value.trim();
-
-      showLoader();
-      const res = await VK_API.updateProfile(name, phone, address);
-      hideLoader();
-
-      if (res.success) {
-        showToast("💾 Profile details updated successfully!");
-        document.getElementById("sidebarUserTitle").textContent = res.user.name;
-        updateNavState();
+      const updatedData = {
+        name: document.getElementById("profName").value,
+        phone: document.getElementById("profPhone").value,
+        address: document.getElementById("profAddress").value
+      };
+      
+      const success = VK_API.updateProfile(updatedData);
+      if (success) {
+        showToast("✅ Profile updated successfully!");
+        setTimeout(() => { window.location.reload(); }, 1500);
       } else {
-        showToast("❌ " + res.message, "error");
+        showToast("❌ Failed to update profile. Please try again.", "error");
       }
     }
 
     function handleLogout() {
-      if (confirm("Are you sure you want to logout?")) {
+      if (confirm("Are you sure you want to log out?")) {
         VK_API.logout();
-        window.location.href = "./index.html";
+        showToast("🔑 Logged out successfully!");
+        setTimeout(() => { window.location.href = "./index.html"; }, 1500);
       }
     }
   </script>
