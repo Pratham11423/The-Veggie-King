@@ -1,0 +1,11 @@
+# Ignore environment variables files
+.env
+Veggie_King_Backend/.env
+
+# Ignore node_modules
+node_modules/
+Veggie_King_Backend/node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
