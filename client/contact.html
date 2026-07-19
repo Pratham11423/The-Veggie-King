@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us — The Veggie King</title>
+  <link rel="stylesheet" href="./index.css" />
+</head>
+<body>
+
+  <!-- Dynamic Header Placeholder -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Page Header Banner -->
+  <div class="page-header-banner">
+    <h1>Contact Us</h1>
+    <p>Have questions or feedback? We would love to hear from you.</p>
+  </div>
+
+  <!-- Contact Layout -->
+  <div class="container section-padding" style="padding-top: 50px; display: flex; flex-direction: column; gap: 60px;">
+    
+    <!-- Contact Info Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+      <div style="background: white; border: 1px solid var(--border-color); padding: 25px; border-radius: var(--radius-card); display: flex; align-items: center; gap: 15px;">
+        <span style="font-size: 2.2rem; background: var(--primary-light); padding: 12px; border-radius: 12px;">📞</span>
+        <div>
+          <h4 style="font-weight: 700; color: var(--text-main);">Call Us</h4>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">+91 01234-567890</p>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">Mon - Sun, 12pm - 9pm</p>
+        </div>
+      </div>
+      <div style="background: white; border: 1px solid var(--border-color); padding: 25px; border-radius: var(--radius-card); display: flex; align-items: center; gap: 15px;">
+        <span style="font-size: 2.2rem; background: var(--primary-light); padding: 12px; border-radius: 12px;">✉️</span>
+        <div>
+          <h4 style="font-weight: 700; color: var(--text-main);">Email Us</h4>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">support@veggieking.com</p>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">feedback@veggieking.com</p>
+        </div>
+      </div>
+      <div style="background: white; border: 1px solid var(--border-color); padding: 25px; border-radius: var(--radius-card); display: flex; align-items: center; gap: 15px;">
+        <span style="font-size: 2.2rem; background: var(--primary-light); padding: 12px; border-radius: 12px;">📍</span>
+        <div>
+          <h4 style="font-weight: 700; color: var(--text-main);">Visit Us</h4>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">112, Sharda-Nagar</p>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">Saharanpur, Uttar Pradesh</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map & Form Row -->
+    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start;">
+      
+      <!-- Contact Form -->
+      <div style="background: white; border: 1px solid var(--border-color); padding: 30px; border-radius: var(--radius-card);">
+        <h3 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 20px; color: var(--text-main);">Send Us A Message</h3>
+        
+        <form id="contactForm" onsubmit="handleContactSubmit(event)" style="display: flex; flex-direction: column; gap: 18px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div>
+              <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem;">Your Name</label>
+              <input type="text" required placeholder="Enter name" style="width:100%; padding:10px; border-radius: var(--radius-input); border: 1px solid var(--border-color);" />
+            </div>
+            <div>
+              <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem;">Email Address</label>
+              <input type="email" required placeholder="Enter email" style="width:100%; padding:10px; border-radius: var(--radius-input); border: 1px solid var(--border-color);" />
+            </div>
+          </div>
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem;">Subject</label>
+            <input type="text" required placeholder="Subject of query" style="width:100%; padding:10px; border-radius: var(--radius-input); border: 1px solid var(--border-color);" />
+          </div>
+          <div>
+            <label style="display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem;">Message</label>
+            <textarea required rows="5" placeholder="How can we help you?" style="width:100%; padding:10px; border-radius: var(--radius-input); border: 1px solid var(--border-color); font-family: inherit; resize: none;"></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="padding: 12px; font-weight: 700; font-size: 1rem;">Send Message ✉️</button>
+        </form>
+      </div>
+
+      <!-- Map/FAQ column -->
+      <div style="display: flex; flex-direction: column; gap: 30px;">
+        <!-- Google Map Mock -->
+        <div style="background: var(--gray-mid); height: 250px; border-radius: var(--radius-card); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--border-color); text-align: center; padding: 20px;">
+          <span style="font-size: 3rem; margin-bottom: 10px;">🗺️</span>
+          <h4 style="font-weight: 700; margin-bottom: 5px;">Google Maps View</h4>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Interactive Map Placeholder for 112, Sharda-Nagar, Saharanpur.</p>
+        </div>
+
+        <!-- FAQs -->
+        <div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 15px; color: var(--text-main);">Frequently Asked Questions</h3>
+          <div id="contactFaqList" style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Rendered from JS -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Dynamic Footer Placeholder -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Core Scripts -->
+  <script src="./assets/js/data.js"></script>
+  <script src="./assets/js/mockApi.js"></script>
+  <script src="./assets/js/global.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      renderFaqs();
+    });
+
+    function renderFaqs() {
+      const container = document.getElementById("contactFaqList");
+      if (!container) return;
+
+      container.innerHTML = VK_DATA.faqs.map((faq, i) => `
+        <details style="background: white; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; cursor: pointer;">
+          <summary style="font-weight: 700; color: var(--text-main); outline: none;">${faq.question}</summary>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px; line-height: 1.5; padding-left: 5px;">${faq.answer}</p>
+        </details>
+      `).join("");
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      showToast("🎉 Thank you! Your message has been received. We will respond shortly.");
+      document.getElementById("contactForm").reset();
+    }
+  </script>
+</body>
+</html>

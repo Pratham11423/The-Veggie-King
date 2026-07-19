@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Wishlist — The Veggie King</title>
+  <link rel="stylesheet" href="./index.css" />
+</head>
+<body>
+
+  <!-- Dynamic Header Placeholder -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Page Header Banner -->
+  <div class="page-header-banner">
+    <h1>My Wishlist ❤️</h1>
+    <p>Your saved favorite healthy meals.</p>
+  </div>
+
+  <!-- Wishlist Main Content -->
+  <div class="container section-padding" style="padding-top: 40px;">
+    
+    <div id="wishlistGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+      <!-- Populated dynamically via JS -->
+    </div>
+
+    <!-- Empty Wishlist State -->
+    <div id="emptyWishlistState" style="display: none;">
+      <div class="empty-state">
+        <span class="empty-icon">❤️</span>
+        <h3>Your Wishlist is Empty</h3>
+        <p>Explore our menu and tap the heart icon on any food item to save it here!</p>
+        <a href="./menu.html" class="btn-primary" style="display: inline-block;">Browse Menu 🍽️</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Dynamic Footer Placeholder -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Core Scripts -->
+  <script src="./assets/js/data.js"></script>
+  <script src="./assets/js/mockApi.js"></script>
+  <script src="./assets/js/global.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      if (!VK_API.getCurrentUser()) {
+        showToast("🔑 Please log in to view your wishlist", "error");
+        setTimeout(() => { window.location.href = "./auth.html"; }, 1500);
+        return;
+      }
+      renderWishlist();
+    });
+
+    function renderWishlist() {
+      const wishlistIds = VK_API.getWishlist();
+      const grid = document.getElementById("wishlistGrid");
+      const emptyState = document.getElementById("emptyWishlistState");
+
+      if (wishlistIds.length === 0) {
+        grid.style.display = "none";
+        emptyState.style.display = "block";
+        return;
+      }
+
+      grid.style.display = "grid";
+      emptyState.style.display = "none";
+
+      const cart = VK_API.getCart();
+
+      grid.innerHTML = wishlistIds.map(id => {
+        const prod = VK_DATA.products.find(p => p.id === id);
+        if (!prod) return "";
+
+        const cartQty = cart[prod.id] || 0;
+
+        return `
+          <div class="product-card">
+            <button class="wishlist-toggle active" onclick="removeWishlist(${prod.id})">❤️</button>
+            <div class="card-img-wrap" onclick="window.location.href='./product.html?id=${prod.id}'" style="cursor:pointer">
+              <img src="${prod.imageUrl}" alt="${prod.name}" onerror="this.src='./assets/images/menu-section-mighty-burger.png'" />
+            </div>
+            <div class="card-content">
+              <div class="card-meta">
+                <span class="card-category">${prod.category}</span>
+                <span class="card-rating">⭐ ${prod.rating}</span>
+              </div>
+              <h3 class="card-title" onclick="window.location.href='./product.html?id=${prod.id}'" style="cursor:pointer">${prod.name}</h3>
+              <p class="card-desc">${prod.description}</p>
+              <div class="card-footer">
+                <span class="card-price">₹${prod.price}</span>
+                ${cartQty > 0
+                  ? `<button class="btn-secondary" onclick="window.location.href='./cart.html'">Go to Cart 🛒</button>`
+                  : `<button class="btn-primary" onclick="moveToCart(${prod.id})">Move to Cart</button>`
+                }
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function removeWishlist(id) {
+      VK_API.toggleWishlist(id);
+      showToast("💔 Removed from wishlist");
+      renderWishlist();
+      updateNavState();
+    }
+
+    function moveToCart(id) {
+      VK_API.addToCart(id, 1);
+      VK_API.toggleWishlist(id); // Remove from wishlist
+      showToast("🛒 Moved to shopping cart!");
+      renderWishlist();
+      updateNavState();
+    }
+  </script>
+</body>
+</html>

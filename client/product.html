@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Food Details — The Veggie King</title>
+  <link rel="stylesheet" href="./index.css" />
+</head>
+<body>
+
+  <!-- Dynamic Header Placeholder -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Main Container -->
+  <div class="container section-padding" style="margin-top: 80px; padding-top: 30px;">
+    
+    <!-- Product Detail Card/Grid -->
+    <div id="productDetailWrapper" style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; background: white; border: 1px solid var(--border-color); border-radius: var(--radius-card); padding: 40px; align-items: start; box-shadow: var(--shadow-sm);">
+      <!-- Rendered dynamically -->
+    </div>
+
+    <!-- Related Products -->
+    <div style="margin-top: 60px;">
+      <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 25px;">You May Also Like</h2>
+      <div id="relatedProductsGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+        <!-- Loaded dynamically -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Dynamic Footer Placeholder -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Core Scripts -->
+  <script src="./assets/js/data.js"></script>
+  <script src="./assets/js/mockApi.js"></script>
+  <script src="./assets/js/global.js"></script>
+
+  <script>
+    let currentProd = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const prodId = parseInt(params.get("id")) || 1;
+
+      currentProd = VK_DATA.products.find(p => p.id === prodId);
+      if (!currentProd) {
+        window.location.href = "./404.html";
+        return;
+      }
+
+      renderProductDetails();
+      renderRelatedProducts();
+    });
+
+    function renderProductDetails() {
+      const container = document.getElementById("productDetailWrapper");
+      if (!container) return;
+
+      const wishlist = VK_API.getWishlist();
+      const isFav = wishlist.includes(currentProd.id) ? "active" : "";
+      
+      const cart = VK_API.getCart();
+      const cartQty = cart[currentProd.id] || 0;
+
+      container.innerHTML = `
+        <!-- Image block -->
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+          <div style="background: var(--primary-light); border-radius: var(--radius-card); height: 350px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); position: relative;">
+            <img src="${currentProd.imageUrl}" alt="${currentProd.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='./assets/images/menu-section-mighty-burger.png'" />
+            <button class="wishlist-toggle ${isFav}" onclick="handleDetailsWishlist(${currentProd.id}, this)" style="position: absolute; top: 20px; right: 20px; width: 44px; height: 44px; border-radius: 50%; font-size: 1.3rem; background: white; border: none; cursor: pointer; box-shadow: var(--shadow-md); display: flex; align-items: center; justify-content: center;">❤️</button>
+          </div>
+          <!-- Mock thumbnail gallery -->
+          <div style="display: flex; gap: 10px;">
+            <div style="flex:1; border: 2px solid var(--primary); border-radius: 8px; overflow: hidden; height: 70px; cursor: pointer;">
+              <img src="${currentProd.imageUrl}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='./assets/images/menu-section-mighty-burger.png'"/>
+            </div>
+            <div style="flex:1; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; height: 70px; cursor: pointer; opacity: 0.7;" onclick="showToast('Gallery details are placeholder views.')">
+              <img src="./assets/images/gallery-photo-1.png" style="width:100%; height:100%; object-fit:cover;"/>
+            </div>
+            <div style="flex:1; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; height: 70px; cursor: pointer; opacity: 0.7;" onclick="showToast('Gallery details are placeholder views.')">
+              <img src="./assets/images/gallery-photo-2.png" style="width:100%; height:100%; object-fit:cover;"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info details block -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <div>
+            <span style="background-color: var(--primary-light); color: var(--primary); padding: 4px 12px; border-radius: 20px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase;">🥦 ${currentProd.category}</span>
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--text-main); margin-top: 10px;">${currentProd.name}</h1>
+            <div style="display: flex; gap: 15px; align-items: center; margin-top: 10px;">
+              <span style="color: #ffb800; font-weight: 700;">⭐ ${currentProd.rating} / 5.0 Rating</span>
+              <span style="color: var(--text-muted); font-size: 0.9rem;">| 120+ Ordered</span>
+            </div>
+          </div>
+
+          <div style="font-size: 2.2rem; font-weight: 900; color: var(--primary);">₹${currentProd.price}</div>
+
+          <p style="color: var(--text-muted); line-height: 1.6; font-size: 1.05rem;">${currentProd.description}</p>
+
+          <!-- Ingredients -->
+          <div>
+            <h4 style="font-weight: 700; margin-bottom: 8px;">Ingredients:</h4>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">${currentProd.ingredients.join(", ")}</p>
+          </div>
+
+          <!-- Nutrition facts -->
+          <div style="background: var(--gray-light); border: 1px solid var(--border-color); border-radius: var(--radius-card); padding: 15px;">
+            <h4 style="font-weight: 700; margin-bottom: 10px;">Nutrition Facts (Approx. per serving):</h4>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center; font-size: 0.9rem;">
+              <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 800; color: var(--text-main);">${currentProd.nutrition.calories}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Calories</div>
+              </div>
+              <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 800; color: var(--text-main);">${currentProd.nutrition.protein}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Protein</div>
+              </div>
+              <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 800; color: var(--text-main);">${currentProd.nutrition.carbs}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Carbs</div>
+              </div>
+              <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 800; color: var(--text-main);">${currentProd.nutrition.fat}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">Fats</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quantity selector and CTA buttons -->
+          <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; border-top: 1px solid var(--border-color); padding-top: 25px; margin-top: 10px;">
+            ${cartQty > 0
+              ? `<div style="display: flex; flex-direction:column; gap: 8px;">
+                  <div class="qty-control">
+                    <button class="qty-btn" onclick="updateDetailQty(${currentProd.id}, ${cartQty - 1})">−</button>
+                    <span class="qty-val" style="font-size: 1.1rem; min-width: 30px;">${cartQty}</span>
+                    <button class="qty-btn" onclick="updateDetailQty(${currentProd.id}, ${cartQty + 1})">+</button>
+                  </div>
+                  <span style="font-size: 0.85rem; color: var(--primary); font-weight:600;">Already in Cart</span>
+                 </div>`
+              : `<button class="btn-primary" onclick="handleDetailsAddToCart(${currentProd.id}, false)" style="padding: 14px 28px; font-size: 1.05rem;">Add to Cart 🛒</button>`
+            }
+            <button class="btn-secondary" onclick="handleDetailsAddToCart(${currentProd.id}, true)" style="padding: 14px 28px; font-size: 1.05rem;">Buy Now ⚡</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderRelatedProducts() {
+      const grid = document.getElementById("relatedProductsGrid");
+      if (!grid) return;
+
+      const related = VK_DATA.products
+        .filter(p => p.categoryId === currentProd.categoryId && p.id !== currentProd.id)
+        .slice(0, 3);
+
+      if (related.length === 0) {
+        grid.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1;">No related veggie items found.</p>`;
+        return;
+      }
+
+      const wishlist = VK_API.getWishlist();
+      const cart = VK_API.getCart();
+
+      grid.innerHTML = related.map(prod => {
+        const isFav = wishlist.includes(prod.id) ? "active" : "";
+        const cartQty = cart[prod.id] || 0;
+
+        return `
+          <div class="product-card">
+            <button class="wishlist-toggle ${isFav}" onclick="handleDetailsWishlist(${prod.id}, this)">❤️</button>
+            <div class="card-img-wrap" onclick="window.location.href='./product.html?id=${prod.id}'" style="cursor:pointer">
+              <img src="${prod.imageUrl}" alt="${prod.name}" onerror="this.src='./assets/images/menu-section-mighty-burger.png'" />
+            </div>
+            <div class="card-content">
+              <div class="card-meta">
+                <span class="card-category">${prod.category}</span>
+                <span class="card-rating">⭐ ${prod.rating}</span>
+              </div>
+              <h3 class="card-title" onclick="window.location.href='./product.html?id=${prod.id}'" style="cursor:pointer">${prod.name}</h3>
+              <p class="card-desc">${prod.description}</p>
+              <div class="card-footer">
+                <span class="card-price">₹${prod.price}</span>
+                ${cartQty > 0
+                  ? `<button class="btn-secondary" onclick="window.location.href='./cart.html'">In Cart 🛒</button>`
+                  : `<button class="btn-primary" onclick="handleDetailsAddToCart(${prod.id}, false)">+ Add</button>`
+                }
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function handleDetailsWishlist(id, btn) {
+      if (!VK_API.getCurrentUser()) {
+        showToast("🔑 Please log in first to manage your wishlist!", "error");
+        setTimeout(() => { window.location.href = "./auth.html"; }, 1500);
+        return;
+      }
+      VK_API.toggleWishlist(id);
+      btn.classList.toggle("active");
+      showToast("💖 Wishlist updated!");
+      updateNavState();
+    }
+
+    function handleDetailsAddToCart(id, buyNow = false) {
+      if (!VK_API.getCurrentUser()) {
+        showToast("🔑 Please log in first to add items to cart!", "error");
+        setTimeout(() => { window.location.href = "./auth.html"; }, 1500);
+        return;
+      }
+      VK_API.addToCart(id, 1);
+      showToast("🛒 Added to cart successfully!");
+      updateNavState();
+      
+      if (buyNow) {
+        window.location.href = "./cart.html";
+      } else {
+        renderProductDetails();
+      }
+    }
+
+    function updateDetailQty(id, newQty) {
+      VK_API.updateCartQty(id, newQty);
+      if (newQty <= 0) {
+        showToast("🗑️ Item removed from cart");
+      } else {
+        showToast("🛒 Cart updated");
+      }
+      renderProductDetails();
+      updateNavState();
+    }
+  </script>
+</body>
+</html>
