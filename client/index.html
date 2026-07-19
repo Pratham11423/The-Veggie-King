@@ -6,129 +6,174 @@
     <title>The Veggie King - Healthy & Fresh Food</title>
     <link rel="stylesheet" href="./index.css" />
   </head>
-  <body>
 
+  <!-- Back to Top Button -->
+  <button id="backToTop" title="Go to top">↑</button>
+
+  <body>
     <!-- Dynamic Header Placeholder -->
     <div id="navbar-placeholder"></div>
 
     <!-- Hero Section Start -->
-    <section class="hero-home">
-      <div class="container hero-grid">
-        <div class="hero-left-content">
-          <span class="badge-promo">🥦 100% Organic & Fresh</span>
-          <h1>Healthy & Fresh Food <span>For You</span></h1>
-          <p>Created for lovers of Healthy, Delicious & Non-Obvious Veg food. Pick fresh meals prepared by expert chefs.</p>
-          <div style="display: flex; gap: 15px;" class="mt-10">
-            <a href="./menu.html" class="btn-primary">Explore Menu 🍽️</a>
-            <a href="./about.html" class="btn-outline">Learn More</a>
-          </div>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero1">
+          <strong><h1 class="title">Healthy & Fresh Food For You</h1></strong>
+          <p>Created for lovers of Healthy, Delicious & Non-Obvious Food.</p>
+          <button onclick="window.location.href = './menu.html'">
+            Check menu →
+          </button>
+          <img
+            class="mirch"
+            src="./assets/images/hero-section-food.png"
+            alt="Mirch"
+          />
         </div>
-        <div class="hero-right-content">
-          <div class="hero-img-box">
-            <img class="hero-plate1" src="./assets/images/hero-section-slide-food-1.png" alt="Delicious Salad Bowl" />
-            <img class="mirch" src="./assets/images/hero-section-food.png" alt="Chili Decoration" />
-          </div>
-        </div>
+        <img
+          class="hero-plate1"
+          src="./assets/images/hero-section-slide-food-1.png"
+          alt="pic1"
+        />
+        <div class="hero2"></div>
       </div>
     </section>
     <!-- Hero Section End -->
 
-    <!-- Featured Categories Start -->
-    <section class="section-padding" style="background-color: white;">
-      <div class="container">
-        <div class="text-center mb-50">
-          <span class="section-tag">Categories</span>
-          <h2>Browse by Category</h2>
-        </div>
-        <div id="homeCategoriesGrid" class="category-grid">
-          <!-- Categories loaded dynamically from JS -->
-        </div>
-      </div>
-    </section>
-    <!-- Featured Categories End -->
-
-    <!-- Popular Foods Start -->
-    <section class="section-padding">
-      <div class="container">
-        <div class="text-center mb-50">
-          <span class="section-tag">Fresh & Healthy</span>
-          <h2>Our Popular Foods</h2>
-        </div>
-        <div id="homePopularGrid" class="products-grid">
-          <!-- Popular Foods loaded dynamically from JS -->
-        </div>
-        <div class="text-center mt-40">
-          <a href="./menu.html" class="btn-outline">View Full Menu 🍽️</a>
-        </div>
-      </div>
-    </section>
-    <!-- Popular Foods End -->
-
-    <!-- Why Choose Us Start -->
-    <section class="section-padding" style="background-color: white;">
-      <div class="container">
-        <div class="text-center mb-50">
-          <span class="section-tag">Our Features</span>
-          <h2>Why Choose Us</h2>
-        </div>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feat-icon">🥬</div>
-            <h3>Fresh Ingredients</h3>
-            <p>100% natural, pesticide-free vegetables handpicked every morning from local farms.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feat-icon">🥗</div>
-            <h3>Healthy Meals</h3>
-            <p>Expert dietitian-designed dishes optimized for balanced nutrition and taste.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feat-icon">⚡</div>
-            <h3>Fast Delivery</h3>
-            <p>Hot and fresh meals delivered straight to your doorstep within 30 to 45 minutes.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feat-icon">⭐</div>
-            <h3>Best Quality</h3>
-            <p>Strict kitchen hygiene standards and recipes prepared with pure olive oil.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Why Choose Us End -->
-
     <!-- About-Us Section Start -->
-    <section class="section-padding">
-      <div class="container">
-        <div class="two-col-grid">
-          <div>
-            <img src="./assets/images/about-us-section-food.png" alt="Fresh Salad Dish" style="width: 100%; height: auto; max-width: 480px; border-radius: var(--radius-card); filter: drop-shadow(0 15px 25px rgba(0,0,0,0.1));" />
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 20px;">
-            <span class="section-tag">A Few Words About Us</span>
-            <h2>We Are The Veggie King</h2>
-            <p>Our restaurant is a haven where you can enjoy a variety of delicious and healthy food made with love and care. We are passionate about providing our customers with an unforgettable dining experience.</p>
-            <p>Using local, organic, and clean produce, we make sure that every dish you eat makes you feel satisfied and nourished.</p>
-            <a href="./about.html" class="btn-primary" style="width: fit-content; margin-top: 10px;">Read Our Story</a>
-          </div>
+    <section id="about-us" class="sec2">
+      <div class="semi-circle"></div>
+      <div class="sec2-content">
+        <img
+          class="img2"
+          src="./assets/images/about-us-section-food.png"
+          alt="pic2"
+        />
+        <div class="sec2-text">
+          <h2>About Us</h2>
+          <h3>Few words about us</h3>
+          <p>
+            We are not ordinary food truck. We create a place overflowing with positive energy that it expresses important to us values. Get to know them specifically.
+          </p>
         </div>
       </div>
     </section>
     <!-- About-Us Section End -->
 
-    <!-- Testimonials Section Start -->
-    <section class="section-padding" style="background-color: white;">
-      <div class="container">
-        <div class="text-center mb-50">
-          <span class="section-tag">Customer Reviews</span>
-          <h2>What Our Clients Say</h2>
+    <!-- Menu Section Start -->
+    <section id="menu" class="sec3">
+      <div class="sec3-text">
+        <h3>Menu</h3>
+        <h1>Explore our best food</h1>
+        <p>Below you can see our best selling meals!</p>
+      </div>
+      <div class="sec3-photos">
+        <div class="sec3-img1">
+          <img
+            class="row-img"
+            src="./assets/images/menu-section-mighty-burger.png"
+            alt="pic3"
+          />
+          <h4 class="row-h4">Mighty burger <span class="card-sub">Served with fries and drink</span></h4>
         </div>
-        <div id="homeTestimonialsGrid" class="products-grid">
-          <!-- Testimonials loaded dynamically -->
+        <div class="sec3-img2">
+          <img
+            class="row-img"
+            src="./assets/images/menu-section-chickpae-salad.png"
+            alt="pic4"
+          />
+          <h4 class="row-h4">Chickpae's salad <span class="card-sub">Served with fries and drink</span></h4>
+        </div>
+        <div class="sec3-img3">
+          <img
+            class="row-img"
+            src="./assets/images/menu-section-chickpae-wrap.png"
+            alt="pic5"
+          />
+          <h4 class="row-h4">Chickpae's wrap <span class="card-sub">Served with fries and drink</span></h4>
         </div>
       </div>
     </section>
-    <!-- Testimonials Section End -->
+    <!-- Menu Section End -->
+
+    <!-- Clients Section Start -->
+    <section class="sec4">
+      <div class="sec4-text">
+        <h1>Good food = happy clients</h1>
+      </div>
+      <div class="sec4-photos1">
+        <div class="sec4-img1">
+          <img
+            class="row-img"
+            src="./assets/images/gallery-photo-1.png"
+            alt="img1"
+          />
+        </div>
+        <div class="sec4-img2">
+          <img
+            class="row-img"
+            src="./assets/images/gallery-photo-2.png"
+            alt="img2"
+          />
+        </div>
+        <div class="sec4-img3">
+          <img
+            class="row-img"
+            src="./assets/images/gallery-photo-3.png"
+            alt="img3"
+          />
+        </div>
+      </div>
+      <div class="sec4-photos2">
+        <div class="sec4-img4">
+          <img
+            class="row-img"
+            src="./assets/images/gallery-photo-4.png"
+            alt="img4"
+          />
+        </div>
+        <div class="sec4-img5">
+          <img
+            class="row-img"
+            src="./assets/images/gallery-photo-5.png"
+            alt="img5"
+          />
+        </div>
+        <div class="sec4-img6">
+          <img
+            class="row-img"
+            src="./assets/images/gallery-photo-6.png"
+            alt="img6"
+          />
+        </div>
+      </div>
+    </section>
+    <!-- Clients Section End -->
+
+    <!-- Contact-Section Start -->
+    <section id="contact" class="sec5">
+      <div class="sec5-text">
+        <h4>Contact</h4>
+        <h2>We're waiting for you!</h2>
+      </div>
+      <div class="three">
+        <div class="sec5-div1">
+          <img src="./assets/icons/time-icon.svg" alt="time-logo" />
+          <h4>Today 12 pm - 9 pm</h4>
+          <p>Working Hours</p>
+        </div>
+        <div class="sec5-div2">
+          <img src="./assets/icons/map-icon.svg" alt="location-logo" />
+          <h4>3883 Rupert St, Vancouver</h4>
+          <p>Find Us</p>
+        </div>
+        <div class="sec5-div3">
+          <img src="./assets/icons/phone-icon.svg" alt="phone-logo" />
+          <h4>(604) 569-2198</h4>
+          <p>Call to Us</p>
+        </div>
+      </div>
+    </section>
+    <!-- Contact-Section End -->
 
     <!-- Dynamic Footer Placeholder -->
     <div id="footer-placeholder"></div>
@@ -137,106 +182,6 @@
     <script src="./assets/js/data.js"></script>
     <script src="./assets/js/mockApi.js"></script>
     <script src="./assets/js/global.js"></script>
-    
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        renderFeaturedCategories();
-        renderPopularProducts();
-        renderTestimonials();
-      });
-
-      function renderFeaturedCategories() {
-        const grid = document.getElementById("homeCategoriesGrid");
-        if (!grid) return;
-        
-        grid.innerHTML = VK_DATA.categories.map(cat => `
-          <div class="category-card" onclick="window.location.href='./menu.html?cat=${cat.id}'">
-            <span class="cat-emoji">${cat.emoji}</span>
-            <h4>${cat.name}</h4>
-          </div>
-        `).join("");
-      }
-
-      function renderPopularProducts() {
-        const grid = document.getElementById("homePopularGrid");
-        if (!grid) return;
-
-        const popular = VK_DATA.products.filter(p => p.isPopular);
-        const wishlist = VK_API.getWishlist();
-        const cart = VK_API.getCart();
-
-        grid.innerHTML = popular.map(prod => {
-          const isFav = wishlist.includes(prod.id) ? "active" : "";
-          const cartQty = cart[prod.id] || 0;
-          
-          return `
-            <div class="product-card">
-              <span class="card-badge">Popular</span>
-              <button class="wishlist-toggle ${isFav}" onclick="handleHomeWishlist(${prod.id}, this)">❤️</button>
-              <div class="card-img-wrap" onclick="window.location.href='./product.html?id=${prod.id}'" style="cursor:pointer">
-                <img src="${prod.imageUrl}" alt="${prod.name}" onerror="this.src='./assets/images/menu-section-mighty-burger.png'" />
-              </div>
-              <div class="card-content">
-                <div class="card-meta">
-                  <span class="card-category">${prod.category}</span>
-                  <span class="card-rating">⭐ ${prod.rating}</span>
-                </div>
-                <h3 class="card-title" onclick="window.location.href='./product.html?id=${prod.id}'" style="cursor:pointer">${prod.name}</h3>
-                <p class="card-desc">${prod.description}</p>
-                <div class="card-footer">
-                  <span class="card-price">₹${prod.price}</span>
-                  ${cartQty > 0 
-                    ? `<button class="btn-secondary" onclick="window.location.href='./cart.html'">Go to Cart 🛒</button>`
-                    : `<button class="btn-primary" onclick="handleHomeAddToCart(${prod.id})">+ Add</button>`
-                  }
-                </div>
-              </div>
-            </div>
-          `;
-        }).join("");
-      }
-
-      function renderTestimonials() {
-        const grid = document.getElementById("homeTestimonialsGrid");
-        if (!grid) return;
-
-        grid.innerHTML = VK_DATA.testimonials.map(t => `
-          <div class="testimonial-card">
-            <div class="testimonial-header">
-              <img class="testimonial-img" src="${t.imageUrl}" alt="${t.name}" onerror="this.src='./assets/images/gallery-photo-6.png'" />
-              <div>
-                <h4 class="testimonial-name">${t.name}</h4>
-                <div class="testimonial-stars">${"⭐".repeat(t.rating)}</div>
-              </div>
-            </div>
-            <p class="testimonial-text">"${t.review}"</p>
-          </div>
-        `).join("");
-      }
-
-      function handleHomeWishlist(id, btn) {
-        if (!VK_API.getCurrentUser()) {
-          showToast("🔑 Please log in first to manage your wishlist!", "error");
-          setTimeout(() => { window.location.href = "./auth.html"; }, 1500);
-          return;
-        }
-        VK_API.toggleWishlist(id);
-        btn.classList.toggle("active");
-        showToast("💖 Wishlist updated!");
-        updateNavState();
-      }
-
-      function handleHomeAddToCart(id) {
-        if (!VK_API.getCurrentUser()) {
-          showToast("🔑 Please log in first to add items to cart!", "error");
-          setTimeout(() => { window.location.href = "./auth.html"; }, 1500);
-          return;
-        }
-        VK_API.addToCart(id, 1);
-        showToast("🛒 Added to cart successfully!");
-        renderPopularProducts();
-        updateNavState();
-      }
-    </script>
+    <script src="./index.js"></script>
   </body>
 </html>

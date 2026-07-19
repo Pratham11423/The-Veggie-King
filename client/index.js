@@ -119,8 +119,4 @@ backToTop.addEventListener("click", () => {
     behavior: "smooth"
   });
 });
-
-
-menuBtn.addEventListener("click", () => {
-  window.location.href = './menu.html';
-});
+// Removed redundant listener to prevent null pointer exceptions.
